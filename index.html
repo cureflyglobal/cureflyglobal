@@ -102,14 +102,16 @@
 
   <!-- load hospital data -->
   <script type="module">
-    import {{ hospitals }} from './nabh_hospitals.js';
+    import nabhHospitals from './nabh_hospitals.js';
+
 
     // Initialize EmailJS (your public key)
     emailjs.init('DEMPRuO-YC_H2Uj4');
 
     // Prepare data array from hospitals file.
     // The hospitals JS should export objects { name, city, international_phone?, surgeryPackages? }
-    const data = hospitals.map(h => ({
+    const data = nabhHospitals.map(h => ({
+
       name: h.name,
       city: h.city,
       international_phone: h.international_phone || '',
