@@ -1,1 +1,237 @@
-<html><body><h1>CureFly Global</h1><p>Placeholder website. Upload to GitHub and I will replace with full code.</p></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CureFly Global — NABH Hospital Finder for International Patients</title>
+  <link rel="stylesheet" href="style.css">
+  <meta name="description" content="CureFly Global — find NABH approved hospitals for international patients, compare estimated surgery costs, contact international desk or request visa letter."/>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="logo">CureFly Global</div>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="#hospitals">Hospitals</a>
+        <a href="#about">About NABH</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero" aria-labelledby="hero-title">
+      <h1 id="hero-title">Find NABH Approved Hospitals with CureFly Global</h1>
+      <p id="hero-subtitle">Trusted healthcare and support for international patients</p>
+      <div class="search-container" role="search">
+        <input id="q" class="search-input" placeholder="Search by city, hospital name, or specialty..." aria-label="Search"/>
+        <button id="searchBtn" class="btn btn-primary" aria-label="Search">Search</button>
+      </div>
+    </section>
+
+    <section id="hospitals" class="filters" aria-labelledby="filters-heading">
+      <h2 id="filters-heading" style="display:none">Filters</h2>
+      <div class="filter-row">
+        <select id="cityFilter" class="filter-select" aria-label="City filter">
+          <option value="">All Cities</option>
+        </select>
+        <select id="specialtyFilter" class="filter-select" aria-label="Specialty filter">
+          <option value="">All Specialties</option>
+          <option>Cardiology</option><option>Oncology</option><option>Orthopedics</option>
+        </select>
+        <select id="ratingFilter" class="filter-select" aria-label="Rating filter">
+          <option value="">All Ratings</option>
+          <option value="4.5">4.5+ Stars</option><option value="4.0">4.0+ Stars</option>
+        </select>
+        <button id="clearFilters" class="filter-clear-btn">Clear</button>
+      </div>
+      <div id="resultsCount" class="results-message" aria-live="polite"></div>
+    </section>
+
+    <section id="list" class="hospital-grid" aria-live="polite"></section>
+  </main>
+
+  <!-- Details Modal -->
+  <div class="modal-wrap" id="detailsModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-header">
+        <h2 id="modalTitle">Hospital Details</h2>
+        <button class="close-btn" onclick="closeModal()" aria-label="Close">Close</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- Consultation popup (EmailJS) -->
+  <div id="consult-popup" aria-hidden="true">
+    <div id="consult-box" role="dialog" aria-modal="true">
+      <h3 id="consult-title">Request Details</h3>
+      <form id="consult-form">
+        <input type="hidden" id="hospital_name" name="hospital_name" />
+        <label>Your Name</label><input id="inq-name" type="text" name="user_name" required />
+        <label>Your Email</label><input id="inq-email" type="email" name="user_email" required />
+        <label>Your Phone (with country code)</label><input id="inq-phone" type="text" name="user_phone" />
+        <label>Your Country</label><input id="inq-country" type="text" name="user_country" required />
+        <label>Request Type</label>
+        <select name="request_type" id="request_type">
+          <option value="Cost Estimate">Cost Estimate</option>
+          <option value="Visa Invitation Letter">Visa Invitation Letter</option>
+          <option value="Treatment Details">Treatment Details</option>
+        </select>
+        <label>Treatment / Comments</label>
+        <textarea id="inq-treatment" name="treatment" rows="3" placeholder="E.g. Knee replacement, heart bypass..."></textarea>
+
+        <div class="popup-actions">
+          <button type="submit" class="btn btn-primary">Send Request</button>
+          <button type="button" class="btn btn-secondary" onclick="closePopup()">Close</button>
+        </div>
+        <div class="small-note">Your email is not visible publicly. We will respond to your email with details and next steps.</div>
+      </form>
+    </div>
+  </div>
+
+  <footer class="site-footer" id="contact">
+    <div class="container">
+      <div>© CureFly Global — NABH Hospital Finder</div>
+      <div>Contact via form (international desk)</div>
+    </div>
+  </footer>
+
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+  <!-- load hospital data -->
+  <script type="module">
+    import {{ hospitals }} from './nabh_hospitals.js';
+
+    // Initialize EmailJS (your public key)
+    emailjs.init('DEMPRuO-YC_H2Uj4');
+
+    // Prepare data array from hospitals file.
+    // The hospitals JS should export objects { name, city, international_phone?, surgeryPackages? }
+    const data = hospitals.map(h => ({
+      name: h.name,
+      city: h.city,
+      international_phone: h.international_phone || '',
+      surgeryPackages: h.surgeryPackages || []
+    }));
+
+    // Populate unique cities into the City filter
+    const citySet = Array.from(new Set(data.map(d => d.city))).sort();
+    const cityFilterEl = document.getElementById('cityFilter');
+    citySet.forEach(c => { const opt = document.createElement('option'); opt.value = c; opt.textContent = c; cityFilterEl.appendChild(opt); });
+
+    const listEl = document.getElementById('list');
+    const q = document.getElementById('q');
+    const resultsCount = document.getElementById('resultsCount');
+
+    function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+    function render(list){
+      listEl.innerHTML = '';
+      if(!list.length){
+        listEl.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#666">No hospitals found.</div>';
+        resultsCount.textContent = 'Found 0 hospitals';
+        return;
+      }
+      resultsCount.textContent = `Found ${list.length} hospital${list.length>1?'s':''}`;
+      list.forEach(h => {
+        const card = document.createElement('div');
+        card.className = 'hospital-card';
+        card.innerHTML = `
+          <div class="hospital-header">
+            <h3 class="hospital-name">${escapeHtml(h.name)}</h3>
+            <span class="nabh-badge">NABH Approved</span>
+          </div>
+          <div class="hospital-info">
+            <div class="info-row">${escapeHtml(h.city)}</div>
+          </div>
+          <div class="rating">
+            <span class="rating-text">Estimated packages available</span>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-primary" onclick="showDetails('${h.name.replace(/'/g,\"\\\\'\")}')">Details</button>
+            ${'${h.international_phone ? `<a class=\"btn btn-secondary\" href=\"tel:${h.international_phone}\">Call Intl</a>` : `<button class=\"btn btn-secondary\" onclick=\"openConsultForm(\\'${h.name.replace(/'/g,\"\\\\'\\')},\\'Cost Estimate\\')\">Request via Form</button>`}'}
+            <a class="btn btn-secondary" target="_blank" href="https://www.google.com/search?q=${encodeURIComponent(h.name + ' ' + h.city + ' reviews')}">Reviews</a>
+            <a class="btn btn-secondary" target="_blank" href="https://www.google.com/maps/search/${encodeURIComponent(h.name + ' ' + h.city)}">Directions</a>
+          </div>
+        `;
+        listEl.appendChild(card);
+      });
+    }
+
+    function applyFilters(){
+      const term = (q.value||'').trim().toLowerCase();
+      const city = (document.getElementById('cityFilter').value||'').trim().toLowerCase();
+      const specialty = (document.getElementById('specialtyFilter').value||'').trim().toLowerCase();
+      const filtered = data.filter(h => {
+        const text = (h.name + ' ' + (h.surgeryPackages||[]).map(p=>p.name).join(' ')).toLowerCase();
+        const cityMatch = !city || (h.city && h.city.toLowerCase() === city);
+        const termMatch = !term || text.includes(term);
+        return cityMatch && termMatch;
+      });
+      render(filtered);
+    }
+
+    document.getElementById('searchBtn').addEventListener('click', applyFilters);
+    document.getElementById('clearFilters').addEventListener('click', () => {
+      document.getElementById('cityFilter').value = '';
+      document.getElementById('q').value = '';
+      applyFilters();
+    });
+
+    // details modal and consult form
+    const detailsModal = document.getElementById('detailsModal');
+    const modalBody = document.getElementById('modalBody');
+
+    window.showDetails = function(name){
+      const h = data.find(x => x.name === name);
+      if(!h) return alert('Not found');
+      modalBody.innerHTML = `
+        <div><strong>${escapeHtml(h.name)}</strong></div>
+        <div class="meta">${escapeHtml(h.city)}</div>
+        <div class="detail-section">
+          <h4>Estimated Surgery Packages (INR)</h4>
+          ${ (h.surgeryPackages && h.surgeryPackages.length) ? h.surgeryPackages.map(p => `<div class="detail-info-row"><span class="info-label">${escapeHtml(p.name)}</span><span class="info-value">${escapeHtml(p.cost)}</span></div>`).join('') : `<div class="detail-info-row"><span class="info-label">Example Package</span><span class="info-value">₹150,000 - ₹300,000</span></div>` }
+          <div class="small-note">*This is an estimated price. Final cost may vary.</div>
+        </div>
+        <div style="margin-top:12px">
+          ${ h.international_phone ? `<a class="btn btn-primary" href="tel:${encodeURIComponent(h.international_phone)}">Call International Line</a>` : `<button class="btn btn-primary" onclick="openConsultForm('${h.name.replace(/'/g,\"\\\\'\")}','Cost Estimate')">Request via Form</button>` }
+          <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+        </div>
+      `;
+      detailsModal.style.display = 'flex';
+    };
+    function closeModal(){ detailsModal.style.display = 'none'; }
+
+    function openPopup(){ document.getElementById('consult-popup').style.display = 'flex'; document.getElementById('consult-popup').setAttribute('aria-hidden','false'); }
+    function closePopup(){ document.getElementById('consult-popup').style.display = 'none'; document.getElementById('consult-popup').setAttribute('aria-hidden','true'); }
+    window.openConsultForm = function(hospitalName, defaultType='Cost Estimate'){
+      document.getElementById('hospital_name').value = hospitalName;
+      document.getElementById('request_type').value = defaultType;
+      document.getElementById('consult-title').textContent = `${defaultType} — ${hospitalName}`;
+      openPopup();
+    };
+
+    document.getElementById('consult-form').addEventListener('submit', function(e){
+      e.preventDefault();
+      const form = e.target;
+      const templateParams = {
+        hospital_name: form.hospital_name.value || '',
+        user_name: form.user_name.value || '',
+        user_email: form.user_email.value || '',
+        user_phone: form.user_phone.value || '',
+        user_country: form.user_country.value || '',
+        treatment: form.treatment.value || '',
+        request_type: form.request_type.value || ''
+      };
+      emailjs.send('service_67ydigv', 'template_c9ziuip', templateParams)
+        .then(() => { alert('Request sent. We will contact you soon.'); form.reset(); closePopup(); })
+        .catch(err => { console.error(err); alert('Failed to send. Try again later.'); });
+    });
+
+    // initial render
+    render(data);
+  </script>
+</body>
+</html>
