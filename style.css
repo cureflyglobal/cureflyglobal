@@ -1,1 +1,37 @@
-body{font-family: Arial;}
+/* CureFly Global — Canva-style theme */
+:root{--primary:#2563eb;--accent:#764ba2;--muted:#6b7280;--bg:linear-gradient(135deg,#667eea 0%,#764ba2 100%)}
+*{box-sizing:border-box}
+body{font-family:Inter,system-ui,Arial,sans-serif;margin:0;background:var(--bg);color:#111;min-height:100vh}
+.container{max-width:1200px;margin:0 auto;padding:20px}
+.site-header{background:rgba(255,255,255,0.95);backdrop-filter:blur(6px);padding:12px 0;box-shadow:0 2px 20px rgba(0,0,0,0.08)}
+.header-inner{display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:1.6rem;font-weight:800;color:var(--primary)}
+.nav-links a{margin-left:18px;text-decoration:none;color:#374151;font-weight:600}
+.hero{text-align:center;padding:40px 0;color:white}
+.hero h1{font-size:2.4rem;margin:0 0 8px;font-weight:800}
+.hero p{opacity:0.95;margin:0 0 18px}
+.search-container{max-width:600px;margin:0 auto;position:relative}
+.search-input{width:100%;padding:14px 18px;border-radius:50px;border:none;font-size:1rem;outline:none}
+.btn{padding:10px 14px;border-radius:10px;border:none;cursor:pointer}
+.btn-primary{background:var(--primary);color:#fff;font-weight:700}
+.filters{background:#fff;padding:18px;border-radius:12px;margin:18px 0;box-shadow:0 6px 20px rgba(0,0,0,0.06)}
+.filter-row{display:flex;gap:10px;flex-wrap:wrap}
+.filter-select{padding:10px;border-radius:8px;border:1px solid #e5e7eb}
+.results-message{text-align:center;padding:8px;margin:8px 0;background:#f0f9ff;border-radius:8px;color:var(--primary);font-weight:600}
+.hospital-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px;padding:10px 0}
+.hospital-card{background:#fff;border-radius:12px;padding:16px;box-shadow:0 6px 20px rgba(0,0,0,0.06)}
+.hospital-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.hospital-name{font-size:1.1rem;font-weight:700;color:#111;margin:0}
+.nabh-badge{background:#10b981;color:white;padding:6px 10px;border-radius:20px;font-weight:700;font-size:0.85rem}
+.hospital-info{color:var(--muted);font-size:0.95rem;margin-bottom:8px}
+.card-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.btn-secondary{background:#f3f4f6;color:#111;border:1px solid #e5e7eb}
+.rating-text{color:var(--muted)}
+.small-note{font-size:12px;color:#6b7280;margin-top:8px}
+.modal-wrap{display:none;position:fixed;inset:0;background:rgba(2,6,23,0.5);align-items:center;justify-content:center;z-index:9999}
+.modal{background:#fff;border-radius:12px;padding:18px;width:90%;max-width:800px}
+.close-btn{background:#f3f4f6;border:none;padding:8px 10px;border-radius:8px;cursor:pointer}
+#consult-popup{display:none;position:fixed;inset:0;background:rgba(2,6,23,0.6);align-items:center;justify-content:center;z-index:10000}
+#consult-box{background:#fff;padding:18px;border-radius:12px;width:96%;max-width:420px}
+.site-footer{margin-top:18px;padding:14px;background:rgba(255,255,255,0.9);border-radius:10px}
+@media (max-width:768px){ .hero h1{font-size:1.6rem} .filter-row{flex-direction:column} .hospital-grid{grid-template-columns:1fr} }
