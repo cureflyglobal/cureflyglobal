@@ -1,146 +1,200 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" class="h-full">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>CureFly Global — Hospital Finder</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Curefly Global - Find World-Class Healthcare</title>
 
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background: #f8f9fa;
-        margin: 0;
-        padding: 20px;
-    }
-    h1 {
-        text-align: center;
-        color: #2b6cb0;
-    }
-    .controls {
-        max-width: 900px;
-        margin: auto;
-        display: flex;
-        gap: 10px;
-        justify-content: center;
-        padding: 20px 0;
-    }
-    select, input {
-        padding: 10px;
-        font-size: 16px;
-        width: 240px;
-    }
-    .hospital-card {
-        background: white;
-        padding: 15px;
-        margin: 10px auto;
-        width: 90%;
-        max-width: 900px;
-        border-radius: 8px;
-        box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-    }
-    .hospital-name {
-        font-size: 20px;
-        font-weight: bold;
-        color: #2b6cb0;
-        margin-bottom: 5px;
-    }
-    .label {
-        font-weight: bold;
-    }
-    .no-results {
-        text-align: center;
-        padding: 20px;
-        color: #777;
-    }
-</style>
+  <!-- Canva UI → keep Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body { box-sizing: border-box; }
+    .hospital-card { transition: transform 0.2s, box-shadow 0.2s; }
+    .hospital-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+    .star-rating { color: #fbbf24; }
+  </style>
 </head>
 
-<body>
+<body class="h-full bg-gradient-to-br from-blue-50 to-white font-sans">
 
-<h1>CureFly Global — NABH Hospital Finder</h1>
+  <!-- HEADER (unchanged Canva design) -->
+  <header class="bg-white shadow-lg border-b-4 border-blue-600">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-4 md:mb-0">
+          <h1 class="text-3xl font-bold text-blue-900">Curefly Global</h1>
+          <p class="text-lg text-blue-700 mt-1">Find World-Class Healthcare</p>
+        </div>
 
-<div class="controls">
-    <select id="citySelect">
-        <option value="">Select City</option>
-    </select>
+        <!-- Helpdesk -->
+        <div class="flex flex-col sm:flex-row gap-4">
+          <div class="text-center">
+            <p class="text-sm text-gray-600">Local Helpdesk</p>
+            <p class="text-lg font-semibold text-blue-900">+91-11-4567-8900</p>
+          </div>
+          <div class="text-center">
+            <p class="text-sm text-gray-600">International Helpdesk</p>
+            <p class="text-lg font-semibold text-green-700">+1-800-123-4567</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
 
-    <input id="searchBox" type="text" placeholder="Search hospital..." />
-</div>
+  <!-- SEARCH PANEL -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Search NABH Accredited Hospitals</h2>
 
-<div id="results"></div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
-<script>
-// Load JSON from GitHub repo
-const JSON_FILE = "nabh_google_enriched.json";
+        <div>
+          <label class="block text-sm font-medium mb-2">Select City</label>
+          <select id="city-select"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg">
+            <option value="">Choose a city...</option>
+          </select>
+        </div>
 
-let allHospitals = [];
-let filteredHospitals = [];
+        <div>
+          <label class="block text-sm font-medium mb-2">Specialty (Optional)</label>
+          <select id="specialty-select"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg">
+            <option value="">All Specialties</option>
+          </select>
+        </div>
 
-// Load Data
-fetch(JSON_FILE)
-    .then(res => res.json())
-    .then(data => {
-        allHospitals = data;
-        populateCities();
-        renderResults(allHospitals);
-    });
+        <div class="flex items-end">
+          <button id="search-btn"
+            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg">
+            Search Hospitals
+          </button>
+        </div>
 
-// Populate City Dropdown
-function populateCities() {
-    const citySelect = document.getElementById("citySelect");
-    const cities = [...new Set(allHospitals.map(h => h.city).filter(Boolean))].sort();
+      </div>
+    </div>
 
-    cities.forEach(city => {
-        let opt = document.createElement("option");
-        opt.value = city;
-        opt.textContent = city;
-        citySelect.appendChild(opt);
-    });
-}
+    <!-- RESULTS -->
+    <div id="results-section" class="hidden">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-2xl font-bold text-gray-900">Search Results</h3>
+        <span id="results-count" class="text-gray-600"></span>
+      </div>
 
-// Apply Filters
-document.getElementById("citySelect").addEventListener("change", applyFilters);
-document.getElementById("searchBox").addEventListener("keyup", applyFilters);
+      <div id="hospitals-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-6"></div>
+    </div>
 
-function applyFilters() {
-    let city = document.getElementById("citySelect").value.toLowerCase();
-    let keyword = document.getElementById("searchBox").value.toLowerCase();
+    <!-- NO RESULTS -->
+    <div id="no-results" class="hidden text-center py-12">
+      <p class="text-gray-500 text-lg">No hospitals found.</p>
+    </div>
+  </main>
 
-    filteredHospitals = allHospitals.filter(h => {
-        let matchesCity = !city || h.city?.toLowerCase() === city;
-        let matchesKeyword = h.name?.toLowerCase().includes(keyword);
-        return matchesCity && matchesKeyword;
-    });
+  <!-- MODAL -->
+  <div id="hospital-modal"
+       class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-xl max-w-4xl w-full max-h-[90%] overflow-y-auto p-6">
+      <div class="flex justify-between items-start mb-4">
+        <h2 id="modal-hospital-name" class="text-2xl font-bold"></h2>
+        <button id="close-modal" class="text-gray-500 hover:text-gray-700">
+          ✕
+        </button>
+      </div>
+      <div id="modal-content"></div>
+    </div>
+  </div>
 
-    renderResults(filteredHospitals);
-}
+  <!-- LOAD YOUR NABH DATA FILE -->
+  <script type="module">
+    import { hospitals as nabhList } from "./nabh_hospitals_full (1).js";
 
-// Render Hospital Cards
-function renderResults(list) {
-    const container = document.getElementById("results");
-    container.innerHTML = "";
+    const citySelect = document.getElementById("city-select");
+    const specialtySelect = document.getElementById("specialty-select");
+    const searchBtn = document.getElementById("search-btn");
+    const hospitalsGrid = document.getElementById("hospitals-grid");
+    const resultsSection = document.getElementById("results-section");
+    const noResults = document.getElementById("no-results");
+    const resultsCount = document.getElementById("results-count");
 
-    if (list.length === 0) {
-        container.innerHTML = `<div class="no-results">No hospitals found.</div>`;
-        return;
+    let hospitalData = {};
+
+    function normalize(s) {
+      return (s || "").trim().toLowerCase();
     }
 
-    list.forEach(h => {
-        container.innerHTML += `
-            <div class="hospital-card">
-                <div class="hospital-name">${h.name}</div>
-                <div><span class="label">City:</span> ${h.city || 'N/A'}</div>
-                <div><span class="label">Phone:</span> ${h.phone || 'N/A'}</div>
-                <div><span class="label">Rating:</span> ${h.rating || 'N/A'} ⭐</div>
-                <div><span class="label">Total Reviews:</span> ${h.user_ratings_total || 'N/A'}</div>
-                <div><span class="label">Website:</span> <a href="${h.website || '#'}" target="_blank">${h.website || 'N/A'}</a></div>
-                <div><span class="label">Nearest Airport:</span> ${h.nearest_airport || 'N/A'}</div>
-                <div><a href="${h.navigation_url}" target="_blank">📍 Open in Google Maps</a></div>
-            </div>
-        `;
+    // Build city → hospitals mapping
+    nabhList.forEach(h => {
+      const cityKey = normalize(h.city);
+      if (!hospitalData[cityKey]) hospitalData[cityKey] = [];
+      hospitalData[cityKey].push(h);
     });
-}
-</script>
+
+    // Populate cities dropdown
+    Object.keys(hospitalData).forEach(cityKey => {
+      const opt = document.createElement("option");
+      opt.value = cityKey;
+      opt.textContent = cityKey.replace(/(^\w|\s\w)/g, m => m.toUpperCase());
+      citySelect.appendChild(opt);
+    });
+
+    // Run search
+    function search() {
+      const cityKey = normalize(citySelect.value);
+      if (!cityKey) {
+        resultsSection.classList.add("hidden");
+        noResults.classList.remove("hidden");
+        return;
+      }
+
+      const list = hospitalData[cityKey] || [];
+
+      if (!list.length) {
+        resultsSection.classList.add("hidden");
+        noResults.classList.remove("hidden");
+        return;
+      }
+
+      resultsCount.textContent = `${list.length} hospitals`;
+      noResults.classList.add("hidden");
+      resultsSection.classList.remove("hidden");
+
+      hospitalsGrid.innerHTML = list.map(h => `
+        <div class="hospital-card bg-white p-6 rounded-lg shadow cursor-pointer"
+             onclick="showDetails('${h.name.replace(/'/g,'')}')">
+          <h3 class="text-xl font-bold mb-2">${h.name}</h3>
+          <p class="text-gray-600 mb-2">${h.city}</p>
+        </div>
+      `).join("");
+    }
+
+    searchBtn.addEventListener("click", search);
+    citySelect.addEventListener("change", search);
+
+    // Modal
+    window.showDetails = function(name) {
+      const hospital = nabhList.find(h => h.name === name);
+      if (!hospital) return;
+
+      document.getElementById("modal-hospital-name").textContent = hospital.name;
+
+      document.getElementById("modal-content").innerHTML = `
+        <p><strong>City:</strong> ${hospital.city}</p>
+        <p><strong>Phone:</strong> ${hospital.international_phone || "Not provided"}</p>
+
+        <h3 class="font-bold mt-4 mb-2">Surgeries</h3>
+        ${(hospital.surgeryPackages || [])
+          .map(s => `<p>${s.name} — ${s.cost}</p>`)
+          .join("")}
+      `;
+
+      document.getElementById("hospital-modal").classList.remove("hidden");
+    };
+
+    document.getElementById("close-modal").onclick = () =>
+      document.getElementById("hospital-modal").classList.add("hidden");
+
+  </script>
 
 </body>
 </html>
