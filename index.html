@@ -1,436 +1,146 @@
-<!doctype html>
-<html lang="en" class="h-full">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Curefly Global - Find World-Class Healthcare</title>
-  <script src="/_sdk/element_sdk.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CureFly Global — Hospital Finder</title>
 
-  <style>
-    body { box-sizing: border-box; }
-    .hospital-card { transition: transform 0.2s, box-shadow 0.2s; }
-    .hospital-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
-    .star-rating { color: #fbbf24; }
-  </style>
-  <style>@view-transition { navigation: auto; }</style>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f8f9fa;
+        margin: 0;
+        padding: 20px;
+    }
+    h1 {
+        text-align: center;
+        color: #2b6cb0;
+    }
+    .controls {
+        max-width: 900px;
+        margin: auto;
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        padding: 20px 0;
+    }
+    select, input {
+        padding: 10px;
+        font-size: 16px;
+        width: 240px;
+    }
+    .hospital-card {
+        background: white;
+        padding: 15px;
+        margin: 10px auto;
+        width: 90%;
+        max-width: 900px;
+        border-radius: 8px;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    }
+    .hospital-name {
+        font-size: 20px;
+        font-weight: bold;
+        color: #2b6cb0;
+        margin-bottom: 5px;
+    }
+    .label {
+        font-weight: bold;
+    }
+    .no-results {
+        text-align: center;
+        padding: 20px;
+        color: #777;
+    }
+</style>
 </head>
-<body class="h-full bg-gradient-to-br from-blue-50 to-white font-sans">
-  <div class="min-h-full">
-    <!-- Header -->
-    <header class="bg-white shadow-lg border-b-4 border-blue-600">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div class="flex flex-col md:flex-row justify-between items-center">
-          <div class="mb-4 md:mb-0">
-            <h1 id="site-title" class="text-3xl font-bold text-blue-900">Curefly Global</h1>
-            <p id="tagline" class="text-lg text-blue-700 mt-1">Find World-Class Healthcare</p>
-          </div>
-          <div class="flex flex-col sm:flex-row gap-4">
-            <div class="text-center">
-              <p class="text-sm text-gray-600">Local Helpdesk</p>
-              <p id="local-helpdesk" class="text-lg font-semibold text-blue-900">+91-11-4567-8900</p>
-            </div>
-            <div class="text-center">
-              <p class="text-sm text-gray-600">International Helpdesk</p>
-              <p id="international-helpdesk" class="text-lg font-semibold text-green-700">+1-800-123-4567</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </header>
 
-    <!-- Search Section -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">Search NABH Accredited Hospitals</h2>
+<body>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <label for="city-select" class="block text-sm font-medium text-gray-700 mb-2">Select City</label>
-            <select id="city-select" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-              <option value="">Choose a city...</option>
-              <!-- options added dynamically from NABH dataset -->
-            </select>
-          </div>
+<h1>CureFly Global — NABH Hospital Finder</h1>
 
-          <div>
-            <label for="specialty-select" class="block text-sm font-medium text-gray-700 mb-2">Specialty (Optional)</label>
-            <select id="specialty-select" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-              <option value="">All Specialties</option>
-              <option value="cardiology">Cardiology</option>
-              <option value="orthopedics">Orthopedics</option>
-              <option value="oncology">Oncology</option>
-              <option value="neurology">Neurology</option>
-              <option value="gastroenterology">Gastroenterology</option>
-            </select>
-          </div>
+<div class="controls">
+    <select id="citySelect">
+        <option value="">Select City</option>
+    </select>
 
-          <div class="flex items-end">
-            <button id="search-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200">
-              Search Hospitals
-            </button>
-          </div>
-        </div>
-      </div>
+    <input id="searchBox" type="text" placeholder="Search hospital..." />
+</div>
 
-      <!-- Results -->
-      <div id="results-section" class="hidden">
-        <div class="flex justify-between items-center mb-6">
-          <h3 class="text-2xl font-bold text-gray-900">Search Results</h3>
-          <span id="results-count" class="text-gray-600"></span>
-        </div>
+<div id="results"></div>
 
-        <div id="hospitals-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-6"></div>
-      </div>
+<script>
+// Load JSON from GitHub repo
+const JSON_FILE = "nabh_google_enriched.json";
 
-      <!-- No results -->
-      <div id="no-results" class="hidden text-center py-12">
-        <div class="text-gray-500">
-          <svg class="mx-auto h-12 w-12 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.47-.881-6.08-2.33" />
-          </svg>
-          <h3 class="text-lg font-medium text-gray-900 mb-2">No hospitals found</h3>
-          <p class="text-gray-500">Please select a city to view available hospitals.</p>
-        </div>
-      </div>
-    </main>
+let allHospitals = [];
+let filteredHospitals = [];
 
-    <!-- Modal -->
-    <div id="hospital-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div class="bg-white rounded-xl max-w-4xl w-full max-h-[90%] overflow-y-auto">
-        <div class="p-6">
-          <div class="flex justify-between items-start mb-4">
-            <h2 id="modal-hospital-name" class="text-2xl font-bold text-gray-900"></h2>
-            <button id="close-modal" class="text-gray-400 hover:text-gray-600" aria-label="Close modal">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-          <div id="modal-content"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Inline script that loads NABH dataset and initializes UI -->
-  <script type="module">
-    // ---------------------------
-    // Utility helpers
-    // ---------------------------
-    function normalizeKey(s) {
-      return (s || "").toString().trim().toLowerCase();
-    }
-
-    function safeOpenConsoleWarn(msg) {
-      if (window && window.console) console.warn(msg);
-    }
-
-    // DOM
-    const citySelect = document.getElementById('city-select');
-    const specialtySelect = document.getElementById('specialty-select');
-    const searchBtn = document.getElementById('search-btn');
-    const resultsSection = document.getElementById('results-section');
-    const hospitalsGrid = document.getElementById('hospitals-grid');
-    const resultsCount = document.getElementById('results-count');
-    const noResults = document.getElementById('no-results');
-    const hospitalModal = document.getElementById('hospital-modal');
-    const closeModal = document.getElementById('close-modal');
-    const modalContent = document.getElementById('modal-content');
-    const modalTitle = document.getElementById('modal-hospital-name');
-
-    // hospitalData will be built from NABH dataset only (you requested: keep styling, only show uploaded hospital details)
-    let hospitalData = {}; // { cityKey: [ {...}, ... ] }
-
-    // try to import NABH module (handles either renamed file or file with space encoded)
-    async function loadNabh() {
-      // Preferred file name without spaces - recommend you rename your file to this
-      const tryNames = [
-        './nabh_hospitals_full.js',
-        './nabh_hospitals_full%20(1).js',
-        './nabh_hospitals_full%20(1).mjs',
-        './nabh_hospitals_full%20(1).js'
-      ];
-
-      let nabhList = null;
-
-      // 1) If the user script already sets window.nabhHospitals, use it immediately
-      if (window.nabhHospitals && Array.isArray(window.nabhHospitals)) {
-        nabhList = window.nabhHospitals;
-        console.info('NABH data loaded from window.nabhHospitals (global).');
-        return nabhList;
-      }
-
-      // 2) Try dynamic import with possible encoded name(s)
-      for (const p of tryNames) {
-        try {
-          // Note: import() expects a module file that exports `hospitals` (export const hospitals = [...])
-          const mod = await import(p);
-          if (mod && (mod.hospitals || mod.default)) {
-            nabhList = mod.hospitals || mod.default || null;
-            console.info('NABH data loaded via module import from', p);
-            break;
-          }
-        } catch (err) {
-          // silent - we'll try next
-        }
-      }
-
-      // 3) final fallback: if file not exported as module, it may still be loaded as a classic script (window.nabhHospitals)
-      if (!nabhList && window.nabhHospitals && Array.isArray(window.nabhHospitals)) {
-        nabhList = window.nabhHospitals;
-        console.info('NABH data loaded from window.nabhHospitals (post-import fallback).');
-      }
-
-      if (!nabhList) {
-        safeOpenConsoleWarn('Could not load NABH dataset. Please ensure nabh_hospitals_full.js (or nabh_hospitals_full (1).js) is in the same folder and either exports `hospitals` or sets `window.nabhHospitals`.');
-        return [];
-      }
-
-      return nabhList;
-    }
-
-    function buildHospitalDataFromNabh(nabhList) {
-      const map = {};
-      nabhList.forEach((n, idx) => {
-        const cityKey = normalizeKey(n.city || n.city_name || n.state || 'unknown');
-        if (!map[cityKey]) map[cityKey] = [];
-        // create a minimal record based on available fields in NABH dataset
-        const rec = {
-          id: 'nabh-' + (n.certId || (Date.now().toString().slice(-6) + '-' + idx)),
-          name: n.name || n.hospital_name || 'Unnamed Hospital',
-          nabh: true,
-          rating: n.rating || null,
-          reviews: n.reviews || null,
-          specialties: n.specialties || (n.department ? [n.department] : []),
-          address: n.address || n.city || '',
-          phone: n.phone || n.contact || '',
-          website: n.website || n.website1 || n.website2 || null,
-          doctors: n.doctors || [],
-          surgeries: n.surgeryPackages || n.surgeries || [],
-          nearestAirport: n.nearestAirport || n.airport || '',
-          navigation: n.navigation || ''
-        };
-        map[cityKey].push(rec);
-      });
-
-      return map;
-    }
-
-    function populateCitySelect() {
-      // keep an explicit Kolkata option if not present
-      const existing = new Set(Array.from(citySelect.options).map(o => normalizeKey(o.value || o.textContent)));
-      const toAdd = Object.keys(hospitalData).filter(k => !existing.has(k));
-      toAdd.forEach(k => {
-        const opt = document.createElement('option');
-        opt.value = k;
-        // pretty label: capitalize words
-        opt.textContent = k.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-        citySelect.appendChild(opt);
-      });
-      // ensure kolkata included
-      if (!Array.from(citySelect.options).some(o => normalizeKey(o.value) === 'kolkata')) {
-        const opt = document.createElement('option');
-        opt.value = 'kolkata';
-        opt.textContent = 'Kolkata';
-        citySelect.appendChild(opt);
-        if (!hospitalData['kolkata']) hospitalData['kolkata'] = []; // keep as empty until you add data
-      }
-    }
-
-    function renderHospitalCards(list) {
-      hospitalsGrid.innerHTML = list.map(hospital => {
-        const specialtiesHtml = (hospital.specialties || []).map(s => `<span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">${s}</span>`).join(' ');
-        const ratingHtml = hospital.rating ? `<div class="flex items-center"><span class="star-rating text-lg">★</span><span class="ml-1 font-semibold">${hospital.rating}</span></div>` : '';
-        const reviews = hospital.reviews ? `<p class="text-sm text-gray-600">${hospital.reviews} reviews</p>` : '';
-        const phone = hospital.phone ? `<p class="text-blue-600 font-medium">${hospital.phone}</p>` : '';
-        const address = hospital.address ? `<p class="text-gray-600 mb-2">${hospital.address}</p>` : '';
-        const nearestAirport = hospital.nearestAirport ? `<p class="text-sm text-gray-600 mb-2"><strong>Nearest Airport:</strong> ${hospital.nearestAirport}</p>` : '';
-        return `
-          <div class="hospital-card bg-white rounded-lg shadow-md p-6 cursor-pointer" data-id="${hospital.id}">
-            <div class="flex justify-between items-start mb-4">
-              <div>
-                <h3 class="text-xl font-bold text-gray-900 mb-2">${hospital.name}</h3>
-                <div class="flex items-center mb-2">
-                  <span class="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">NABH Accredited</span>
-                </div>
-              </div>
-              <div class="text-right">
-                ${ratingHtml}
-                ${reviews}
-              </div>
-            </div>
-
-            <div class="mb-4">
-              ${address}
-              ${phone}
-            </div>
-
-            <div class="mb-4">
-              <h4 class="font-semibold text-gray-900 mb-2">Specialties:</h4>
-              <div class="flex flex-wrap gap-2">${specialtiesHtml}</div>
-            </div>
-
-            <div class="border-t pt-4">
-              ${nearestAirport}
-              <button class="text-blue-600 hover:text-blue-800 font-medium text-sm view-details-btn">View Details & Navigation →</button>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function showNoResults() {
-      resultsSection.classList.add('hidden');
-      noResults.classList.remove('hidden');
-    }
-
-    function showResults(list) {
-      noResults.classList.add('hidden');
-      resultsSection.classList.remove('hidden');
-      resultsCount.textContent = `${list.length} hospital(s) found`;
-      renderHospitalCards(list);
-    }
-
-    function performSearch() {
-      const selectedCity = normalizeKey(citySelect.value);
-      const selectedSpecialty = (specialtySelect.value || '').toLowerCase();
-
-      if (!selectedCity) {
-        showNoResults();
-        return;
-      }
-
-      const hospitals = (hospitalData[selectedCity] || []).slice();
-      if (!hospitals || hospitals.length === 0) {
-        showNoResults();
-        return;
-      }
-
-      let filtered = hospitals;
-      if (selectedSpecialty) {
-        filtered = hospitals.filter(h => (h.specialties || []).some(s => s.toLowerCase().includes(selectedSpecialty)));
-      }
-
-      if (!filtered.length) showNoResults();
-      else showResults(filtered);
-    }
-
-    // details modal
-    function attachCardHandlers() {
-      hospitalsGrid.querySelectorAll('.hospital-card').forEach(card => {
-        const btn = card.querySelector('.view-details-btn');
-        const id = card.getAttribute('data-id');
-        btn?.addEventListener('click', () => showHospitalDetails(id));
-      });
-    }
-
-    function showHospitalDetails(id) {
-      const hospital = Object.values(hospitalData).flat().find(h => h.id === id);
-      if (!hospital) return;
-      modalTitle.textContent = hospital.name || 'Hospital Details';
-      const websiteHtml = hospital.website ? `<p><strong>Website:</strong> <a href="${hospital.website}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800">${hospital.website}</a></p>` : '';
-      const ratingHtml = hospital.rating ? `<p><strong>Rating:</strong> ★ ${hospital.rating} (${hospital.reviews || 0} reviews)</p>` : '';
-      const doctorsHtml = (hospital.doctors || []).map(d => `
-        <div class="bg-gray-50 p-4 rounded-lg border-l-4 border-blue-500 mb-3">
-          <div class="flex justify-between items-start mb-2">
-            <div>
-              <p class="font-semibold text-lg">${d.name || 'Dr. —'}</p>
-              <p class="text-blue-600 font-medium">${d.specialty || ''}</p>
-            </div>
-            <div class="text-right">
-              ${d.rating ? `<div class="flex items-center"><span class="star-rating text-lg">★</span><span class="ml-1 font-semibold">${d.rating}</span></div>` : ''}
-              ${d.reviews ? `<p class="text-sm text-gray-600">${d.reviews} reviews</p>` : ''}
-            </div>
-          </div>
-          <p class="text-sm text-gray-700 mb-2">${d.qualifications || ''}</p>
-          <div class="flex justify-between items-center text-sm">
-            <span class="text-gray-600">${d.experience || ''} experience</span>
-            ${d.consultationFee ? `<span class="text-green-600 font-medium">Consultation: ${d.consultationFee}</span>` : ''}
-          </div>
-          ${d.languages ? `<p class="text-xs text-gray-500 mt-1">Languages: ${d.languages.join(', ')}</p>` : ''}
-        </div>
-      `).join('') || '<p class="text-gray-600">Doctor details not provided.</p>';
-
-      modalContent.innerHTML = `
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div>
-            <h3 class="text-lg font-semibold mb-3">Hospital Information</h3>
-            <div class="space-y-2 mb-6">
-              <p><strong>Address:</strong> ${hospital.address || ''}</p>
-              <p><strong>Phone:</strong> ${hospital.phone || ''}</p>
-              ${websiteHtml}
-              ${ratingHtml}
-              <p><strong>NABH Accredited:</strong> <span class="text-green-600">✓ Yes</span></p>
-            </div>
-
-            <h3 class="text-lg font-semibold mb-3">All Specialist Doctors</h3>
-            <div class="space-y-4 mb-6">${doctorsHtml}</div>
-          </div>
-
-          <div>
-            <h3 class="text-lg font-semibold mb-3">Popular Surgery Costs</h3>
-            <div class="space-y-3 mb-6">
-              ${(hospital.surgeries || []).map(s => `<div class="bg-blue-50 p-3 rounded-lg"><p class="font-medium">${s.name || s.title || 'Procedure'}</p><p class="text-blue-600 font-semibold">${s.cost || s.price || ''}</p></div>`).join('') || '<p class="text-gray-600">Surgery price details not provided.</p>'}
-            </div>
-
-            <h3 class="text-lg font-semibold mb-3">Airport Navigation</h3>
-            <div class="bg-green-50 p-4 rounded-lg">
-              <p class="font-medium mb-2">From ${hospital.nearestAirport || '—'}</p>
-              <p class="text-sm text-gray-700">${hospital.navigation || 'Navigation details not provided.'}</p>
-              ${hospital.address ? `<button class="mt-3 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm" onclick="window.open('https://www.google.com/maps/search/${encodeURIComponent(hospital.address)}','_blank')">Open in Google Maps</button>` : ''}
-            </div>
-          </div>
-        </div>
-      `;
-      hospitalModal.classList.remove('hidden');
-    }
-
-    closeModal?.addEventListener('click', () => hospitalModal.classList.add('hidden'));
-    hospitalModal?.addEventListener('click', (e) => { if (e.target === hospitalModal) hospitalModal.classList.add('hidden'); });
-
-    // wire search UI
-    searchBtn?.addEventListener('click', () => {
-      performSearch();
-      // after results rendered attach card handlers
-      setTimeout(attachCardHandlers, 50);
+// Load Data
+fetch(JSON_FILE)
+    .then(res => res.json())
+    .then(data => {
+        allHospitals = data;
+        populateCities();
+        renderResults(allHospitals);
     });
-    citySelect?.addEventListener('change', () => { performSearch(); setTimeout(attachCardHandlers, 50); });
-    specialtySelect?.addEventListener('change', () => { performSearch(); setTimeout(attachCardHandlers, 50); });
 
-    // ---------- Initialization ----------
-    (async function init() {
-      const nabhList = await loadNabh();
-      if (!nabhList || !nabhList.length) {
-        safeOpenConsoleWarn('NABH dataset appears empty. Add your NABH file to the same folder and ensure it exports `hospitals` or sets window.nabhHospitals.');
-        // Keep page usable; show no-results message
-        showNoResults();
+// Populate City Dropdown
+function populateCities() {
+    const citySelect = document.getElementById("citySelect");
+    const cities = [...new Set(allHospitals.map(h => h.city).filter(Boolean))].sort();
+
+    cities.forEach(city => {
+        let opt = document.createElement("option");
+        opt.value = city;
+        opt.textContent = city;
+        citySelect.appendChild(opt);
+    });
+}
+
+// Apply Filters
+document.getElementById("citySelect").addEventListener("change", applyFilters);
+document.getElementById("searchBox").addEventListener("keyup", applyFilters);
+
+function applyFilters() {
+    let city = document.getElementById("citySelect").value.toLowerCase();
+    let keyword = document.getElementById("searchBox").value.toLowerCase();
+
+    filteredHospitals = allHospitals.filter(h => {
+        let matchesCity = !city || h.city?.toLowerCase() === city;
+        let matchesKeyword = h.name?.toLowerCase().includes(keyword);
+        return matchesCity && matchesKeyword;
+    });
+
+    renderResults(filteredHospitals);
+}
+
+// Render Hospital Cards
+function renderResults(list) {
+    const container = document.getElementById("results");
+    container.innerHTML = "";
+
+    if (list.length === 0) {
+        container.innerHTML = `<div class="no-results">No hospitals found.</div>`;
         return;
-      }
+    }
 
-      // Build hospitalData strictly from NABH list (user requested "only show the hospital details i uploaded")
-      hospitalData = buildHospitalDataFromNabh(nabhList);
+    list.forEach(h => {
+        container.innerHTML += `
+            <div class="hospital-card">
+                <div class="hospital-name">${h.name}</div>
+                <div><span class="label">City:</span> ${h.city || 'N/A'}</div>
+                <div><span class="label">Phone:</span> ${h.phone || 'N/A'}</div>
+                <div><span class="label">Rating:</span> ${h.rating || 'N/A'} ⭐</div>
+                <div><span class="label">Total Reviews:</span> ${h.user_ratings_total || 'N/A'}</div>
+                <div><span class="label">Website:</span> <a href="${h.website || '#'}" target="_blank">${h.website || 'N/A'}</a></div>
+                <div><span class="label">Nearest Airport:</span> ${h.nearest_airport || 'N/A'}</div>
+                <div><a href="${h.navigation_url}" target="_blank">📍 Open in Google Maps</a></div>
+            </div>
+        `;
+    });
+}
+</script>
 
-      // populate city select dynamically
-      populateCitySelect();
-
-      // If user had a preselected city in the select (e.g., New Delhi), we can optionally perform a search — but keep behavior manual
-      // show hint in console
-      console.info('NABH dataset loaded. Cities available:', Object.keys(hospitalData).map(k => k));
-
-      // If they pick a city and click Search, results will come from NABH dataset
-    })();
-  </script>
-
-  <!-- IMPORTANT: Put your NABH dataset file in the same folder.
-       Recommended filename (clean): nabh_hospitals_full.js
-       If your file name contains spaces (e.g. "nabh_hospitals_full (1).js"), the module import will try the URL-encoded name.
-       The NABH file should either:
-         - Export as an ES module: `export const hospitals = [ ... ];`
-         OR
-         - Set a global: `window.nabhHospitals = [ ... ];`
-  -->
-  <!-- Example: <script src="./nabh_hospitals_full (1).js"></script>    OR    <script type="module" src="./nabh_hospitals_full.js"></script> -->
 </body>
 </html>
