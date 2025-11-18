@@ -4,226 +4,436 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Curefly Global - Find World-Class Healthcare</title>
+
   <script src="/_sdk/element_sdk.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
     body { box-sizing: border-box; }
     .hospital-card { transition: transform 0.2s, box-shadow 0.2s; }
-    .hospital-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-    }
+    .hospital-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
     .star-rating { color: #fbbf24; }
   </style>
 
   <style>@view-transition { navigation: auto; }</style>
+
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
 </head>
 
 <body class="h-full bg-gradient-to-br from-blue-50 to-white font-sans">
-<div class="min-h-full">
-  
-<!-- HEADER (unchanged) -->
-... *(YOUR FULL HEADER SECTION — UNCHANGED)* ...
+  <div class="min-h-full">
 
-<!-- EVERYTHING ABOVE IS IDENTICAL — I DID NOT CHANGE ANYTHING -->
+    <!-- Header -->
+    <header class="bg-white shadow-lg border-b-4 border-blue-600">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="mb-4 md:mb-0">
+            <h1 id="site-title" class="text-3xl font-bold text-blue-900">Curefly Global</h1>
+            <p id="tagline" class="text-lg text-blue-700 mt-1">Find World-Class Healthcare</p>
+          </div>
 
-<!-- ⭐ BEGIN LOGIC CHANGE HERE ⭐ -->
+          <div class="flex flex-col sm:flex-row gap-4">
+            <div class="text-center">
+              <p class="text-sm text-gray-600">Local Helpdesk</p>
+              <p id="local-helpdesk" class="text-lg font-semibold text-blue-900">+91-11-4567-8900</p>
+            </div>
+            <div class="text-center">
+              <p class="text-sm text-gray-600">International Helpdesk</p>
+              <p id="international-helpdesk" class="text-lg font-semibold text-green-700">+1-800-123-4567</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Search Section -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Search NABH Accredited Hospitals</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Select City</label>
+            <select id="city-select"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+              <option value="">Choose a city...</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Specialty (Optional)</label>
+            <select id="specialty-select"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+              <option value="">All Specialties</option>
+            </select>
+          </div>
+
+          <div class="flex items-end">
+            <button id="search-btn"
+              class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg">
+              Search Hospitals
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Section -->
+      <div id="results-section" class="hidden">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-2xl font-bold text-gray-900">Search Results</h3>
+          <span id="results-count" class="text-gray-600"></span>
+        </div>
+
+        <div id="hospitals-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-6"></div>
+      </div>
+
+      <!-- No Results -->
+      <div id="no-results" class="hidden text-center py-12">
+        <div class="text-gray-500">
+          <svg class="mx-auto h-12 w-12 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.47-.881-6.08-2.33" />
+          </svg>
+          <h3 class="text-lg font-medium text-gray-900 mb-2">No hospitals found</h3>
+          <p class="text-gray-500">Please select a city to view available hospitals.</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- Modal -->
+    <div id="hospital-modal"
+      class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+      <div class="bg-white rounded-xl max-w-4xl w-full max-h-[90%] overflow-y-auto">
+        <div class="p-6">
+          <div class="flex justify-between items-start mb-4">
+            <h2 id="modal-hospital-name" class="text-2xl font-bold text-gray-900"></h2>
+            <button id="close-modal" class="text-gray-400 hover:text-gray-600">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          <div id="modal-content"></div>
+        </div>
+      </div>
+    </div>
 <script>
-let hospitalData = {};   // dynamic
+// ------------------------------
+// Load Google-Enriched JSON File
+// ------------------------------
+let hospitalList = [];
+let hospitalData = {};   // grouped by city
 
-// Load JSON from GitHub Pages
 async function loadHospitalJSON() {
     try {
-        const response = await fetch("./nabh_google_enriched.json");
-        const data = await response.json();
+        const res = await fetch("nabh_google_enriched.json");
+        hospitalList = await res.json();
 
-        // Convert into your structure (group by city)
-        const grouped = {};
+        console.log("Loaded enriched hospitals:", hospitalList.length);
 
-        data.forEach(h => {
-            const city = (h.city || "unknown").toLowerCase().trim();
-            if (!grouped[city]) grouped[city] = [];
-            grouped[city].push(h);
-        });
-
-        hospitalData = grouped;
-        console.log("Loaded Google-enriched NABH data:", hospitalData);
-
-        populateCities();
-
+        buildCityMap();
+        populateCitySelect();
+        populateSpecialtySelect();
     } catch (err) {
-        console.error("JSON Load Error:", err);
+        console.error("Error loading JSON:", err);
     }
 }
 
-// Populate dropdown dynamically
-function populateCities() {
-    const cities = Object.keys(hospitalData);
+// ------------------------------
+// Build city -> hospitals mapping
+// ------------------------------
+function normalizeCity(c) {
+    return (c || "").trim().toLowerCase();
+}
+
+function buildCityMap() {
+    hospitalData = {};
+
+    hospitalList.forEach((h, i) => {
+        const city = normalizeCity(h.source_record?.city || "");
+        if (!city) return;
+
+        if (!hospitalData[city]) hospitalData[city] = [];
+
+        hospitalData[city].push({
+            id: i + 1,
+            name: h.name,
+            rating: h.rating,
+            reviews: h.reviews,
+            address: h.address,
+            phone: h.phone,
+            website: h.website,
+            specialties: h.source_record?.specialties || [],
+            doctors: h.source_record?.doctors || [],
+            surgeries: h.source_record?.surgeryPackages || [],
+            nearestAirport: h.nearest_airport || "",
+            navigation: h.navigation_url || ""
+        });
+    });
+
+    console.log("Grouped data:", hospitalData);
+}
+
+// ------------------------------
+// Populate city dropdown
+// ------------------------------
+function populateCitySelect() {
     const select = document.getElementById("city-select");
 
-    select.innerHTML = `<option value="">Choose a city...</option>`;
-
-    cities.forEach(city => {
+    Object.keys(hospitalData).forEach(city => {
         const opt = document.createElement("option");
         opt.value = city;
         opt.textContent = city.charAt(0).toUpperCase() + city.slice(1);
         select.appendChild(opt);
     });
-
-    // Always include kolkata even if no hospitals yet
-    if (!cities.includes("kolkata")) {
-        const opt = document.createElement("option");
-        opt.value = "kolkata";
-        opt.textContent = "Kolkata";
-        select.appendChild(opt);
-    }
 }
 
-// SEARCH SYSTEM — SAME DESIGN
-const citySelect = document.getElementById("city-select");
-const specialtySelect = document.getElementById("specialty-select");
-const searchBtn = document.getElementById("search-btn");
-const resultsSection = document.getElementById("results-section");
-const hospitalsGrid = document.getElementById("hospitals-grid");
-const resultsCount = document.getElementById("results-count");
-const noResults = document.getElementById("no-results");
-const hospitalModal = document.getElementById("hospital-modal");
-const closeModal = document.getElementById("close-modal");
+// ------------------------------
+// Populate specialty dropdown
+// ------------------------------
+function populateSpecialtySelect() {
+    const specialtySelect = document.getElementById("specialty-select");
+    const specialtySet = new Set();
 
-searchBtn.addEventListener("click", performSearch);
-citySelect.addEventListener("change", performSearch);
-specialtySelect.addEventListener("change", performSearch);
+    hospitalList.forEach(h => {
+        const specs = h.source_record?.specialties || [];
+        specs.forEach(s => specialtySet.add(s));
+    });
 
+    specialtySet.forEach(s => {
+        const opt = document.createElement("option");
+        opt.value = s;
+        opt.textContent = s;
+        specialtySelect.appendChild(opt);
+    });
+}
+
+// ------------------------------
+// SEARCH FUNCTION
+// ------------------------------
 function performSearch() {
-    const city = citySelect.value;
-    const specialty = specialtySelect.value.toLowerCase();
+    const city = normalizeCity(document.getElementById("city-select").value);
+    const specialty = document.getElementById("specialty-select").value.toLowerCase();
 
     if (!city || !hospitalData[city]) {
         showNoResults();
         return;
     }
 
-    let list = hospitalData[city];
+    let results = hospitalData[city];
 
     if (specialty) {
-        list = list.filter(h =>
-            (h.specialties || [])
-              .some(s => s.toLowerCase().includes(specialty))
+        results = results.filter(h =>
+            h.specialties.some(s => s.toLowerCase().includes(specialty))
         );
     }
 
-    if (!list.length) showNoResults();
-    else displayResults(list);
+    if (results.length === 0) showNoResults();
+    else displayResults(results);
 }
 
-function showNoResults() {
-    resultsSection.classList.add("hidden");
-    noResults.classList.remove("hidden");
-}
-
+// ------------------------------
+// SHOW RESULTS (Canva design preserved)
+// ------------------------------
 function displayResults(hospitals) {
-    noResults.classList.add("hidden");
-    resultsSection.classList.remove("hidden");
-    resultsCount.textContent = `${hospitals.length} hospital(s) found`;
+    document.getElementById("no-results").classList.add("hidden");
+    document.getElementById("results-section").classList.remove("hidden");
 
-    hospitalsGrid.innerHTML = hospitals.map(h => `
-        <div class="hospital-card bg-white rounded-lg shadow-md p-6 cursor-pointer" onclick="showHospitalDetails('${h.id}')">
-            <div class="flex justify-between items-start mb-4">
-                <div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">${h.name}</h3>
-                    <span class="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">
-                        NABH Accredited
-                    </span>
-                </div>
-                <div class="text-right">
-                    <div class="flex items-center">
-                        <span class="star-rating text-lg">★</span>
-                        <span class="ml-1 font-semibold">${h.rating || "—"}</span>
+    document.getElementById("results-count").textContent =
+        `${hospitals.length} hospital(s) found`;
+
+    const container = document.getElementById("hospitals-grid");
+    container.innerHTML = "";
+
+    hospitals.forEach(hospital => {
+        const card = `
+            <div class="hospital-card bg-white rounded-lg shadow-md p-6 cursor-pointer"
+                 onclick="showHospitalDetails(${hospital.id})">
+
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">${hospital.name}</h3>
+                        <span class="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">
+                            NABH Accredited
+                        </span>
                     </div>
-                    <p class="text-sm text-gray-600">${h.reviews || 0} reviews</p>
+
+                    <div class="text-right">
+                        ${hospital.rating ? `
+                            <div class="flex items-center">
+                                <span class="star-rating text-lg">★</span>
+                                <span class="ml-1 font-semibold">${hospital.rating}</span>
+                            </div>
+                            <p class="text-sm text-gray-600">${hospital.reviews} reviews</p>
+                        ` : ""}
+                    </div>
+                </div>
+
+                <p class="text-gray-600 mb-2">${hospital.address}</p>
+                <p class="text-blue-600 font-medium">${hospital.phone || ""}</p>
+
+                <div class="mt-4">
+                    <h4 class="font-semibold text-gray-900 mb-2">Specialties:</h4>
+                    <div class="flex flex-wrap gap-2">
+                        ${hospital.specialties.map(s =>
+                            `<span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">${s}</span>`
+                        ).join("")}
+                    </div>
+                </div>
+
+                <div class="border-t pt-4 mt-4">
+                    <p class="text-sm text-gray-600"><strong>Nearest Airport:</strong> ${hospital.nearestAirport}</p>
+                    <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">
+                        View Details & Navigation →
+                    </button>
                 </div>
             </div>
-
-            <p class="text-gray-600 mb-2">${h.address || ""}</p>
-            <p class="text-blue-600 font-medium">${h.phone || ""}</p>
-
-            <h4 class="font-semibold text-gray-900 mt-4 mb-2">Specialties:</h4>
-            <div class="flex flex-wrap gap-2">
-                ${(h.specialties || []).map(s =>
-                    `<span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">${s}</span>`
-                ).join("")}
-            </div>
-
-            <div class="border-t pt-4 mt-4">
-                <p class="text-sm text-gray-600 mb-2">
-                    <strong>Nearest Airport:</strong> ${h.nearestAirport || ""}
-                </p>
-                <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">
-                    View Details & Navigation →
-                </button>
-            </div>
-        </div>
-    `).join("");
+        `;
+        container.innerHTML += card;
+    });
 }
 
-// MODAL – SAME DESIGN
+// ------------------------------
+// No results
+// ------------------------------
+function showNoResults() {
+    document.getElementById("results-section").classList.add("hidden");
+    document.getElementById("no-results").classList.remove("hidden");
+}
+<script>
+// -----------------------------------------
+// SHOW HOSPITAL DETAILS (CANVA DESIGN EXACT)
+// -----------------------------------------
 function showHospitalDetails(id) {
-    const hospital = Object.values(hospitalData).flat().find(h => h.id == id);
+
+    const hospital = hospitalList[id - 1];
     if (!hospital) return;
 
     document.getElementById("modal-hospital-name").textContent = hospital.name;
 
+    const specs = hospital.source_record?.specialties || [];
+    const doctors = hospital.source_record?.doctors || [];
+    const surgeries = hospital.source_record?.surgeryPackages || [];
+
     document.getElementById("modal-content").innerHTML = `
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+            <!-- Hospital Info -->
             <div>
                 <h3 class="text-lg font-semibold mb-3">Hospital Information</h3>
-                <p><strong>Address:</strong> ${hospital.address || ""}</p>
-                <p><strong>Phone:</strong> ${hospital.phone || ""}</p>
-                <p><strong>Website:</strong>
-                    <a href="${hospital.website || "#"}" target="_blank" class="text-blue-600 hover:text-blue-800">
-                        ${hospital.website || "Not available"}
-                    </a>
-                </p>
-                <p><strong>Rating:</strong> ★ ${hospital.rating || "—"}
-                   (${hospital.reviews || 0} reviews)</p>
-                <p><strong>NABH Accredited:</strong>
-                   <span class="text-green-600">✓ Yes</span></p>
-            </div>
+                <div class="space-y-2 mb-6">
+                    <p><strong>Address:</strong> ${hospital.address || ""}</p>
+                    <p><strong>Phone:</strong> ${hospital.phone || ""}</p>
+                    ${hospital.website ? `<p><strong>Website:</strong> 
+                        <a href="${hospital.website}" target="_blank" class="text-blue-600 hover:text-blue-800">
+                            ${hospital.website}
+                        </a></p>` : ""}
+                    ${hospital.rating ? `<p><strong>Rating:</strong> ★ ${hospital.rating} (${hospital.reviews} reviews)</p>` : ""}
+                    <p><strong>NABH Accredited:</strong> <span class="text-green-600">✓ Yes</span></p>
+                </div>
 
-            <div>
-                <h3 class="text-lg font-semibold mb-3">Airport Navigation</h3>
-                <div class="bg-green-50 p-4 rounded-lg">
-                    <p><strong>Nearest Airport:</strong> ${hospital.nearestAirport || ""}</p>
-                    <p>${hospital.navigation || ""}</p>
+                <h3 class="text-lg font-semibold mb-3">Specialist Doctors</h3>
+                <div class="space-y-4">
+                    ${doctors.length === 0 ? `
+                        <p class="text-gray-600">Doctor details not available.</p>
+                    ` :
+                    doctors.map(doc => `
+                        <div class="bg-gray-50 p-4 rounded-lg border-l-4 border-blue-500">
 
-                    <button class="mt-3 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm"
-                        onclick="openGoogleMaps('${hospital.address}')">
-                        Open in Google Maps
-                    </button>
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <p class="font-semibold text-lg">${doc.name}</p>
+                                    <p class="text-blue-600 font-medium">${doc.specialty || ""}</p>
+                                </div>
+                                <div class="text-right">
+                                    ${doc.rating ? `
+                                        <div class="flex items-center">
+                                            <span class="star-rating text-lg">★</span>
+                                            <span class="ml-1 font-semibold">${doc.rating}</span>
+                                        </div>
+                                        <p class="text-sm text-gray-600">${doc.reviews} reviews</p>
+                                    ` : ""}
+                                </div>
+                            </div>
+
+                            <p class="text-sm text-gray-700 mb-2">${doc.qualifications || ""}</p>
+
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-gray-600">${doc.experience || ""}</span>
+                                ${doc.consultationFee ? `<span class="text-green-600 font-medium">
+                                    Consultation: ${doc.consultationFee}
+                                </span>` : ""}
+                            </div>
+
+                            ${doc.languages ? `
+                                <p class="text-xs text-gray-500 mt-1">
+                                    Languages: ${doc.languages.join(", ")}
+                                </p>` : ""}
+
+                        </div>
+                    `).join("")}
                 </div>
             </div>
+
+            <!-- Surgeries + Navigation -->
+            <div>
+                <h3 class="text-lg font-semibold mb-3">Popular Surgery Costs</h3>
+
+                <div class="space-y-3 mb-6">
+                    ${surgeries.length === 0 ? `
+                        <p class="text-gray-600">Surgery cost details not available.</p>
+                    ` :
+                    surgeries.map(s => `
+                        <div class="bg-blue-50 p-3 rounded-lg">
+                            <p class="font-medium">${s.name || s.title || "Procedure"}</p>
+                            <p class="text-blue-600 font-semibold">${s.cost || s.price || ""}</p>
+                        </div>
+                    `).join("")}
+                </div>
+
+                <h3 class="text-lg font-semibold mb-3">Airport Navigation</h3>
+
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <p class="font-medium mb-2">From ${hospital.nearest_airport || "Nearest Airport Not Available"}</p>
+                    <p class="text-sm text-gray-700">${hospital.navigation_url ? "Click below for navigation." : "No navigation info available."}</p>
+
+                    ${hospital.navigation_url ? `
+                        <button class="mt-3 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm"
+                            onclick="window.open('${hospital.navigation_url}', '_blank')">
+                            Open in Google Maps
+                        </button>
+                    ` : ""}
+                </div>
+            </div>
+
         </div>
     `;
 
-    hospitalModal.classList.remove("hidden");
+    document.getElementById("hospital-modal").classList.remove("hidden");
 }
 
-function openGoogleMaps(addr) {
-    window.open(`https://www.google.com/maps/search/${encodeURIComponent(addr)}`, "_blank");
-}
+// ----------------------------------
+// Close Modal (no design changed)
+// ----------------------------------
+document.getElementById("close-modal").addEventListener("click", () => {
+    document.getElementById("hospital-modal").classList.add("hidden");
+});
 
-closeModal.onclick = () => hospitalModal.classList.add("hidden");
-hospitalModal.onclick = (e) => { if (e.target === hospitalModal) hospitalModal.classList.add("hidden"); };
+document.getElementById("hospital-modal").addEventListener("click", (e) => {
+    if (e.target === document.getElementById("hospital-modal")) {
+        document.getElementById("hospital-modal").classList.add("hidden");
+    }
+});
 
-// LOAD JSON ON PAGE READY
-loadHospitalJSON();
+// ----------------------------------
+// INITIALIZE WEBSITE
+// ----------------------------------
+window.onload = function() {
+    loadHospitalJSON();
+
+    document.getElementById("search-btn").addEventListener("click", performSearch);
+    document.getElementById("city-select").addEventListener("change", performSearch);
+    document.getElementById("specialty-select").addEventListener("change", performSearch);
+};
 </script>
-<!-- ⭐ END OF CUSTOM LOGIC ⭐ -->
-
-<!-- YOUR ELEMENT SDK + OTHER SCRIPT BLOCKS REMAIN UNCHANGED BELOW -->
-... (keep all your Element SDK scripts untouched) ...
-
-</body>
-</html>
