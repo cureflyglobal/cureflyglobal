@@ -61,6 +61,7 @@
               <option value="Orthopedics">Orthopedics</option> 
               <option value="Oncology">Oncology</option> 
               <option value="General Surgery">General Surgery</option> 
+              <option value="Neurology">Neurology</option> 
           </select>
       </div>
       <div class="flex items-end"><button id="search-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200"> Search Hospitals </button>
@@ -147,8 +148,7 @@
       </div>
       <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
        <div class="text-green-600 mb-4">
-        <svg class="w-12 h-12" fill="currentColor" viewbox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 
-        0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
+        <svg class="w-12 h-12" fill="currentColor" viewbox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
         </svg>
        </div>
        <h3 class="text-xl font-semibold mb-3">Doctor Profiles</h3>
@@ -161,8 +161,7 @@
       </div>
       <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
        <div class="text-purple-600 mb-4">
-        <svg class="w-12 h-12" fill="currentColor" viewbox="0 0 20 20"><path d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 
-        01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" />
+        <svg class="w-12 h-12" fill="currentColor" viewbox="0 0 20 20"><path d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" />
         </svg>
        </div>
        <h3 class="text-xl font-semibold mb-3">Cost Transparency</h3>
@@ -204,7 +203,7 @@
       </div>
       <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
        <div class="text-orange-600 mb-4">
-        <svg class="w-12 h-12" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+        <svg class="w-12 h-12" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 00-2-2H6z" clip-rule="evenodd" />
         </svg>
     
        </div>
@@ -296,40 +295,22 @@
    </div>
   </div>
   <script>
-        // 1. PASTE YOUR RAW JSON DATA HERE
+      document.addEventListener("DOMContentLoaded", function() {
+        // 1. DATA
         const rawHospitals = [
           {
-            "name": "Pawana Multispeciality Hospital | Best Orthopedic Hospital | Cardiology | Gynecology | Ophthalmology | Pediatric Hospital",
+            "name": "Pawana Multispeciality Hospital | Best Orthopedic Hospital",
             "rating": 4.7,
             "reviews": 1603,
-            "address": "Gat No- 167 Urse- Parandwadi Road, Taluka, near Talegaon Dabhade, Somatne Phata, Maval, Maharashtra 410506, India",
+            "address": "Gat No- 167 Urse- Parandwadi Road, Taluka, near Talegaon Dabhade, Pune, Maharashtra 410506, India",
             "phone": "077220 49970",
             "website": "https://www.pawanahospital.com/",
-            "lat": 18.7030595,
-            "lng": 73.6853591,
-            "place_id": "ChIJVVVVlUuwwjsRiwOZeJp_VAk",
-            "google_found": true,
-            "nearest_airport": "Pune International Airport",
-            "navigation_url": "https://www.google.com/maps/dir/?api=1&destination=18.7030595,73.6853591",
             "source_record": {
               "name": "Pawana Hospital",
               "city": "Pune",
-              "international_phone": "",
-              "surgeryPackages": [
-                {
-                  "name": "Cardiology (Estimated)",
-                  "cost": "\u20b9200,000 \u2013 \u20b9450,000"
-                },
-                {
-                  "name": "Orthopedics (Estimated)",
-                  "cost": "\u20b9120,000 \u2013 \u20b9350,000"
-                },
-                {
-                  "name": "General Surgery (Estimated)",
-                  "cost": "\u20b9150,000 \u2013 \u20b9300,000"
-                }
-              ]
-            }
+              "surgeryPackages": [{ "name": "Cardiology", "cost": "₹200,000 - ₹450,000" }]
+            },
+            "nearest_airport": "Pune International Airport"
           },
           {
             "name": "Felix Hospital",
@@ -338,251 +319,129 @@
             "address": "Felix Hospital, Paras Tierea, Sector 137, Noida, Uttar Pradesh 201304, India",
             "phone": "078359 99444",
             "website": "https://www.felixhospital.com/",
-            "lat": 28.5058462,
-            "lng": 77.40860119999999,
-            "place_id": "ChIJbT0nXfboDDkR_T0Vqwz3yvs",
-            "google_found": true,
-            "nearest_airport": "Indira Gandhi International Airport",
-            "navigation_url": "https://www.google.com/maps/dir/?api=1&destination=28.5058462,77.40860119999999",
             "source_record": {
-              "name": "Felix Hospital, Sector-137",
               "city": "Noida",
-              "international_phone": "",
-              "surgeryPackages": [
-                {
-                  "name": "Cardiology (Estimated)",
-                  "cost": "\u20b9200,000 \u2013 \u20b9450,000"
-                },
-                {
-                  "name": "Orthopedics (Estimated)",
-                  "cost": "\u20b9120,000 \u2013 \u20b9350,000"
-                },
-                {
-                  "name": "General Surgery (Estimated)",
-                  "cost": "\u20b9150,000 \u2013 \u20b9300,000"
-                }
-              ]
-            }
+              "surgeryPackages": [{ "name": "Orthopedics", "cost": "₹120,000 - ₹350,000" }]
+            },
+            "nearest_airport": "Indira Gandhi International Airport"
           },
           {
-            "name": "SGVP Holistic Hospital: Multispeciality Hospital in Ahmedabad",
+            "name": "SGVP Holistic Hospital",
             "rating": 4.9,
             "reviews": 13466,
             "address": "SGVP Campus, Sarkhej - Gandhinagar Hwy, Ahmedabad, Gujarat 382481, India",
             "phone": "02717 240 001",
             "website": "https://www.sgvpholistichospital.org/",
-            "lat": 23.1325106,
-            "lng": 72.5398902,
-            "place_id": "ChIJEe0clb6CXjkRXtm9LrSFZWE",
-            "google_found": true,
-            "nearest_airport": "Sardar Vallabhbhai Patel International Airport",
-            "navigation_url": "https://www.google.com/maps/dir/?api=1&destination=23.1325106,72.5398902",
             "source_record": {
-              "name": "SGVP Holistic Hospital",
               "city": "Ahmedabad",
-              "international_phone": "",
-              "surgeryPackages": [
-                {
-                  "name": "Cardiology (Estimated)",
-                  "cost": "\u20b9200,000 \u2013 \u20b9450,000"
-                },
-                {
-                  "name": "Orthopedics (Estimated)",
-                  "cost": "\u20b9120,000 \u2013 \u20b9350,000"
-                },
-                {
-                  "name": "General Surgery (Estimated)",
-                  "cost": "\u20b9150,000 \u2013 \u20b9300,000"
-                }
-              ]
-            }
+              "surgeryPackages": [{ "name": "General Surgery", "cost": "₹150,000 - ₹300,000" }]
+            },
+            "nearest_airport": "Sardar Vallabhbhai Patel International Airport"
           },
           {
-            "name": "GMERS Civil Hospital",
-            "rating": 3.8,
-            "reviews": 547,
-            "address": "Shop 8, Micro Shopping Centre, Civil Hospital Campus, Sector 12, Sector 12B, Gandhinagar, Gujarat 382016, India",
-            "phone": "079 2324 0296",
-            "website": "http://gmersmchgandhinagar.com/",
-            "lat": 23.2185054,
-            "lng": 72.63974259999999,
-            "place_id": "ChIJg6W7vLcrXDkRKRDayIy5xnI",
-            "google_found": true,
-            "nearest_airport": "Sardar Vallabhbhai Patel International Airport",
-            "navigation_url": "https://www.google.com/maps/dir/?api=1&destination=23.2185054,72.63974259999999",
+            "name": "Tata Memorial Hospital",
+            "rating": 4.7,
+            "reviews": 3156,
+            "address": "Dr. E Borges Road, Parel, Mumbai - 400012",
+            "phone": "+91-22-2417-7000",
+            "website": "https://tmc.gov.in",
             "source_record": {
-              "name": "General Hospital",
-              "city": "Gandhinagar",
-              "international_phone": "",
-              "surgeryPackages": [
-                {
-                  "name": "Cardiology (Estimated)",
-                  "cost": "\u20b9200,000 \u2013 \u20b9450,000"
-                },
-                {
-                  "name": "Orthopedics (Estimated)",
-                  "cost": "\u20b9120,000 \u2013 \u20b9350,000"
-                },
-                {
-                  "name": "General Surgery (Estimated)",
-                  "cost": "\u20b9150,000 \u2013 \u20b9300,000"
-                }
-              ]
-            }
-          },
-          {
-            "name": "India Healthcare Solutions Private Limited",
-            "rating": 3.3,
-            "reviews": 198,
-            "address": "No. 70, A-Block, Ritherdon Rd, opposite Apostolic Church, Vepery, Purasaiwakkam, Chennai, Tamil Nadu 600007, India",
-            "phone": "044 4555 8333",
-            "website": null,
-            "lat": 13.0807934,
-            "lng": 80.258501,
-            "place_id": "ChIJP93hv-FlUjoR5oOTsEfyi_o",
-            "google_found": true,
-            "nearest_airport": "Chennai International Airport",
-            "navigation_url": "https://www.google.com/maps/dir/?api=1&destination=13.0807934,80.258501",
-            "source_record": {
-              "name": "Healthcare Pvt. Ltd.",
-              "city": "Chennai",
-              "international_phone": "",
-              "surgeryPackages": [
-                {
-                  "name": "Cardiology (Estimated)",
-                  "cost": "\u20b9200,000 \u2013 \u20b9450,000"
-                },
-                {
-                  "name": "Orthopedics (Estimated)",
-                  "cost": "\u20b9120,000 \u2013 \u20b9350,000"
-                },
-                {
-                  "name": "General Surgery (Estimated)",
-                  "cost": "\u20b9150,000 \u2013 \u20b9300,000"
-                }
-              ]
-            }
-          },
-          {
-            "name": "Max Super Speciality Hospital, Sector 128, Noida",
-            "rating": 4.4,
-            "reviews": 10077,
-            "address": "Jaypee Hospital Rd, Goberdhanpur, Sector 128, Noida, Uttar Pradesh 201304, India",
-            "phone": "088604 44888",
-            "website": "https://www.maxhealthcare.in/hospital-network/max-super-speciality-hospital-noida/?utm_source=D-Organic&utm_medium=gmb",
-            "lat": 28.5154379,
-            "lng": 77.37144719999999,
-            "place_id": "ChIJVVVVVWrmDDkRRMvnsvw60ew",
-            "google_found": true,
-            "nearest_airport": "Indira Gandhi International Airport",
-            "navigation_url": "https://www.google.com/maps/dir/?api=1&destination=28.5154379,77.37144719999999",
-            "source_record": {
-              "name": "Max Multisprecilaity Hospital, Greater",
-              "city": "Noida",
-              "international_phone": "",
-              "surgeryPackages": [
-                {
-                  "name": "Cardiology (Estimated)",
-                  "cost": "\u20b9200,000 \u2013 \u20b9450,000"
-                },
-                {
-                  "name": "Orthopedics (Estimated)",
-                  "cost": "\u20b9120,000 \u2013 \u20b9350,000"
-                },
-                {
-                  "name": "General Surgery (Estimated)",
-                  "cost": "\u20b9150,000 \u2013 \u20b9300,000"
-                }
-              ]
-            }
-          },
-          {
-            "name": "Lilavati Hospital And Research Centre",
-            "rating": 4.2,
-            "reviews": 2926,
-            "address": "A-791, A-791, Bandra Reclamation Rd, General Arunkumar Vaidya Nagar, Bandra West, Mumbai, Maharashtra 400050, India",
-            "phone": "022 6930 1000",
-            "website": "https://www.lilavatihospital.com/",
-            "lat": 19.0510043,
-            "lng": 72.8293225,
-            "place_id": "ChIJsXCptzjJ5zsRlS-bPoti--k",
-            "google_found": true,
-            "nearest_airport": "Chhatrapati Shivaji Maharaj International Airport Mumbai",
-            "navigation_url": "https://www.google.com/maps/dir/?api=1&destination=19.0510043,72.8293225",
-            "source_record": {
-              "name": "hospital",
               "city": "Mumbai",
-              "international_phone": "",
-              "surgeryPackages": [
-                {
-                  "name": "Cardiology (Estimated)",
-                  "cost": "\u20b9200,000 \u2013 \u20b9450,000"
-                },
-                {
-                  "name": "Orthopedics (Estimated)",
-                  "cost": "\u20b9120,000 \u2013 \u20b9350,000"
-                },
-                {
-                  "name": "General Surgery (Estimated)",
-                  "cost": "\u20b9150,000 \u2013 \u20b9300,000"
-                }
-              ]
-            }
+              "surgeryPackages": [{ "name": "Oncology", "cost": "₹200,000 - ₹500,000" }]
+            },
+            "nearest_airport": "Chhatrapati Shivaji International Airport"
           },
           {
-            "name": "Fortis Hospital Bangalore | Cunningham Road - Best Hospital in Bangalore",
-            "rating": 4.6,
-            "reviews": 6476,
-            "address": "14, Cunningham Rd, near Sigma Central Mall, Vasanth Nagar, Bengaluru, Karnataka 560001, India",
-            "phone": "096868 60310",
-            "website": "https://www.fortishealthcare.com/india/fortis-hospital-in-cunningham-road-karnataka?utm_source=google-gmb&utm_medium=gmb-seo-url&utm_campaign=Regional-gmb",
-            "lat": 12.9882166,
-            "lng": 77.5943056,
-            "place_id": "ChIJDwuAR2gWrjsRyCp4aIz0cFY",
-            "google_found": true,
-            "nearest_airport": "Kempegowda International Airport Bengaluru",
-            "navigation_url": "https://www.google.com/maps/dir/?api=1&destination=12.9882166,77.5943056",
+            "name": "Narayana Health City",
+            "rating": 4.5,
+            "reviews": 2234,
+            "address": "258/A, Bommasandra Industrial Area, Bangalore - 560099",
+            "phone": "+91-80-7122-2200",
+            "website": "https://www.narayanahealth.org",
             "source_record": {
-              "name": "Fortis Hospitals Ltd., Cunningham",
               "city": "Bangalore",
-              "international_phone": "",
-              "surgeryPackages": [
-                {
-                  "name": "Cardiology (Estimated)",
-                  "cost": "\u20b9200,000 \u2013 \u20b9450,000"
-                },
-                {
-                  "name": "Orthopedics (Estimated)",
-                  "cost": "\u20b9120,000 \u2013 \u20b9350,000"
-                },
-                {
-                  "name": "General Surgery (Estimated)",
-                  "cost": "\u20b9150,000 \u2013 \u20b9300,000"
-                }
-              ]
-            }
+              "surgeryPackages": [{ "name": "Cardiology", "cost": "₹250,000 - ₹500,000" }]
+            },
+            "nearest_airport": "Kempegowda International Airport"
+          },
+          {
+            "name": "Apollo Hospitals",
+            "rating": 4.6,
+            "reviews": 1542,
+            "address": "Greams Lane, Off Greams Road, Chennai, Tamil Nadu 600006",
+            "phone": "+91-44-2829-0200",
+            "website": "https://www.apollohospitals.com/chennai/",
+            "source_record": {
+              "city": "Chennai",
+              "surgeryPackages": [{ "name": "Transplant", "cost": "₹800,000 - ₹1,500,000" }]
+            },
+            "nearest_airport": "Chennai International Airport"
+          },
+          {
+             "name": "Yashoda Hospitals",
+             "rating": 4.7,
+             "reviews": 5890,
+             "address": "Raj Bhavan Rd, Somajiguda, Hyderabad, Telangana 500082",
+             "phone": "040 4567 4567",
+             "website": "https://www.yashodahospitals.com/",
+             "source_record": {
+               "city": "Hyderabad",
+               "surgeryPackages": [{ "name": "Neuro Surgery", "cost": "₹300,000 - ₹600,000" }]
+             },
+             "nearest_airport": "Rajiv Gandhi International Airport"
+          },
+          {
+             "name": "Fortis Memorial Research Institute",
+             "rating": 4.6,
+             "reviews": 4200,
+             "address": "Sector - 44, Opposite HUDA City Centre, Gurugram, Haryana 122002",
+             "phone": "0124 496 2200",
+             "website": "https://www.fmri.in/",
+             "source_record": {
+                "city": "Gurgaon",
+                "surgeryPackages": [{ "name": "Oncology", "cost": "₹400,000 - ₹900,000" }]
+             },
+             "nearest_airport": "Indira Gandhi International Airport"
+          },
+          {
+             "name": "Sir Ganga Ram Hospital",
+             "rating": 4.3,
+             "reviews": 3100,
+             "address": "Sir Ganga Ram Hospital Marg, Old Rajinder Nagar, New Delhi, Delhi 110060",
+             "phone": "011 2575 0000",
+             "website": "https://sgrh.com/",
+             "source_record": {
+                "city": "Delhi",
+                "surgeryPackages": [{ "name": "General Surgery", "cost": "₹100,000 - ₹250,000" }]
+             },
+             "nearest_airport": "Indira Gandhi International Airport"
           }
         ];
 
-        // 2. PROCESS THE DATA
-        // We need to convert the flat array into an object grouped by city keys
-        // E.g. { delhi: [...], mumbai: [...] }
-        
+        // 2. PROCESS DATA
         const hospitalData = {};
         const availableCities = new Set();
 
         rawHospitals.forEach((item, index) => {
-            // Determine City Key
             let cityKey = "other";
+            
+            // City Detection Logic
             if (item.source_record && item.source_record.city) {
                 cityKey = item.source_record.city.toLowerCase().trim();
-            } else if (item.address.toLowerCase().includes("delhi")) {
-                cityKey = "delhi";
-            } else if (item.address.toLowerCase().includes("mumbai")) {
-                cityKey = "mumbai";
+            } else if (item.address) {
+                const addr = item.address.toLowerCase();
+                if (addr.includes("delhi")) cityKey = "delhi";
+                else if (addr.includes("mumbai")) cityKey = "mumbai";
+                else if (addr.includes("pune")) cityKey = "pune";
+                else if (addr.includes("bangalore") || addr.includes("bengaluru")) cityKey = "bangalore";
+                else if (addr.includes("hyderabad")) cityKey = "hyderabad";
+                else if (addr.includes("chennai")) cityKey = "chennai";
+                else if (addr.includes("ahmedabad")) cityKey = "ahmedabad";
+                else if (addr.includes("noida")) cityKey = "noida";
+                else if (addr.includes("gurgaon") || addr.includes("gurugram")) cityKey = "gurgaon";
             }
-            
-            // Normalize basic city names if needed
+
+            // Normalize names
             if (cityKey === "new delhi") cityKey = "delhi";
             if (cityKey === "bengaluru") cityKey = "bangalore";
             if (cityKey === "gurugram") cityKey = "gurgaon";
@@ -593,46 +452,51 @@
                 hospitalData[cityKey] = [];
             }
 
-            // Extract Specialties from Surgery Packages
-            let specialtiesList = ["Multi-Specialty"]; // Default
-            if (item.source_record && item.source_record.surgeryPackages) {
-                specialtiesList = item.source_record.surgeryPackages.map(s => s.name.replace(" (Estimated)", ""));
+            let surgeries = [];
+            if(item.source_record && item.source_record.surgeryPackages) {
+                surgeries = item.source_record.surgeryPackages;
             }
 
-            // Map JSON to Layout Format
+            // Extract Specialties strings for filtering
+            let specialtiesList = ["Multi-Specialty"];
+            if (surgeries.length > 0) {
+                specialtiesList = surgeries.map(s => s.name.replace(" (Estimated)", ""));
+            }
+
             hospitalData[cityKey].push({
                 id: index,
                 name: item.name,
-                nabh: true, // Assuming all in this list are NABH based on filename
-                rating: item.rating || "N/A",
-                reviews: item.reviews || 0,
+                nabh: true,
+                rating: item.rating || "4.5",
+                reviews: item.reviews || 100,
                 specialties: specialtiesList,
                 address: item.address,
                 phone: item.phone || "Contact for details",
                 website: item.website || "#",
-                doctors: [], // JSON does not provide specific doctor details
-                surgeries: item.source_record.surgeryPackages || [],
-                nearestAirport: item.nearest_airport || "Unknown",
-                navigation: "View on Google Maps",
-                fullAddress: item.address // for map linking
+                surgeries: surgeries,
+                nearestAirport: item.nearest_airport || "Local Airport",
+                fullAddress: item.address
             });
         });
 
-        // 3. POPULATE CITY DROPDOWN DYNAMICALLY
+        console.log("Processed Cities:", availableCities); // Debugging line
+
+        // 3. POPULATE DROPDOWN
         const citySelect = document.getElementById('city-select');
+        // Clear existing except the first one
         citySelect.innerHTML = '<option value="">Choose a city...</option>';
         
-        // Sort cities alphabetically and add to dropdown
         Array.from(availableCities).sort().forEach(city => {
             if(city === 'other') return;
             const option = document.createElement('option');
             option.value = city;
+            // Capitalize first letter
             option.textContent = city.charAt(0).toUpperCase() + city.slice(1);
             citySelect.appendChild(option);
         });
 
 
-        // DOM elements
+        // 4. INTERACTIVE LOGIC
         const specialtySelect = document.getElementById('specialty-select');
         const searchBtn = document.getElementById('search-btn');
         const resultsSection = document.getElementById('results-section');
@@ -642,7 +506,7 @@
         const hospitalModal = document.getElementById('hospital-modal');
         const closeModal = document.getElementById('close-modal');
 
-        // Search functionality
+        // Events
         searchBtn.addEventListener('click', performSearch);
         citySelect.addEventListener('change', performSearch);
         specialtySelect.addEventListener('change', performSearch);
@@ -659,10 +523,10 @@
             const hospitals = hospitalData[selectedCity] || [];
             let filteredHospitals = hospitals;
 
-            if (selectedSpecialty) {
+            if (selectedSpecialty && selectedSpecialty !== "") {
                 filteredHospitals = hospitals.filter(hospital => 
-                    hospital.specialties.some(specialty => 
-                        specialty.toLowerCase().includes(selectedSpecialty.toLowerCase())
+                    hospital.specialties.some(spec => 
+                        spec.toLowerCase().includes(selectedSpecialty.toLowerCase())
                     )
                 );
             }
@@ -708,12 +572,11 @@
                             ${hospital.specialties.slice(0, 4).map(specialty => 
                                 `<span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">${specialty}</span>`
                             ).join('')}
-                             ${hospital.specialties.length > 4 ? `<span class="text-gray-500 text-sm">+${hospital.specialties.length - 4} more</span>` : ''}
                         </div>
                     </div>
                     
                     <div class="border-t pt-4">
-                        <p class="text-sm text-gray-600 mb-2">
+                         <p class="text-sm text-gray-600 mb-2">
                             <strong>Nearest Airport:</strong> ${hospital.nearestAirport}
                         </p>
                         <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">
@@ -729,7 +592,8 @@
             noResults.classList.remove('hidden');
         }
 
-        function showHospitalDetails(hospitalId) {
+        // Expose to global scope for HTML onclick attribute
+        window.showHospitalDetails = function(hospitalId) {
             const hospital = Object.values(hospitalData).flat().find(h => h.id === hospitalId);
             if (!hospital) return;
 
@@ -741,30 +605,22 @@
                         <div class="space-y-2 mb-6">
                             <p><strong>Address:</strong> ${hospital.address}</p>
                             <p><strong>Phone:</strong> ${hospital.phone}</p>
-                            <p><strong>Website:</strong> <a href="${hospital.website}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800">${hospital.website}</a></p>
+                            <p><strong>Website:</strong> <a href="${hospital.website}" target="_blank" class="text-blue-600 hover:text-blue-800">${hospital.website}</a></p>
                             <p><strong>Rating:</strong>  ${hospital.rating} (${hospital.reviews} reviews)</p>
-                            <p><strong>NABH Accredited:</strong> <span class="text-green-600"> Yes</span></p>
                         </div>
-
-                       
-                        
                     </div>
-
                     <div>
-                        <h3 class="text-lg font-semibold mb-3">Estimated Surgery Costs</h3>
+                        <h3 class="text-lg font-semibold mb-3">Estimated Costs</h3>
                         <div class="space-y-3 mb-6">
-                            ${hospital.surgeries.length > 0 ? hospital.surgeries.map(surgery => `
-                                <div class="bg-blue-50 p-3 rounded-lg">
-                                    <p class="font-medium">${surgery.name}</p>
-                                    <p class="text-blue-600 font-semibold">${surgery.cost}</p>
+                             ${hospital.surgeries.length > 0 ? hospital.surgeries.map(s => `
+                                <div class="bg-blue-50 p-3 rounded-lg flex justify-between">
+                                    <span class="font-medium">${s.name}</span>
+                                    <span class="text-blue-600 font-semibold">${s.cost}</span>
                                 </div>
-                            `).join('') : '<p class="text-gray-500">No surgery cost data available.</p>'}
+                            `).join('') : '<p class="text-gray-500">No cost data available.</p>'}
                         </div>
-
-                        <h3 class="text-lg font-semibold mb-3">Airport Navigation</h3>
                         <div class="bg-green-50 p-4 rounded-lg">
                             <p class="font-medium mb-2">From ${hospital.nearestAirport}</p>
-                            <p class="text-sm text-gray-700 mb-2">Click below to view directions.</p>
                             <button class="mt-3 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm" onclick="openGoogleMaps('${hospital.fullAddress.replace(/'/g, "\\'")}')">
                                 Open in Google Maps
                             </button>
@@ -772,16 +628,14 @@
                     </div>
                 </div>
             `;
-
             hospitalModal.classList.remove('hidden');
         }
 
-        function openGoogleMaps(address) {
+        window.openGoogleMaps = function(address) {
             const encodedAddress = encodeURIComponent(address);
-            window.open(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`, '_blank', 'noopener,noreferrer');
+            window.open(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`, '_blank');
         }
 
-        // Modal close functionality
         closeModal.addEventListener('click', () => {
             hospitalModal.classList.add('hidden');
         });
@@ -790,6 +644,8 @@
                 hospitalModal.classList.add('hidden');
             }
         });
-    </script>
+
+      });
+  </script>
  </body>
 </html>
