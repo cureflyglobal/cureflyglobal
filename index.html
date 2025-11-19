@@ -1,439 +1,527 @@
 <!doctype html>
 <html lang="en" class="h-full">
-<head>
+ <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Curefly Global - Find World-Class Healthcare</title>
-
   <script src="/_sdk/element_sdk.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
-
   <style>
-    body { box-sizing: border-box; }
-    .hospital-card { transition: transform 0.2s, box-shadow 0.2s; }
-    .hospital-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
-    .star-rating { color: #fbbf24; }
-  </style>
-
+        body {
+            box-sizing: border-box;
+        }
+        .hospital-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .hospital-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .star-rating {
+            color: #fbbf24;
+        }
+    </style>
   <style>@view-transition { navigation: auto; }</style>
-
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
-</head>
-
-<body class="h-full bg-gradient-to-br from-blue-50 to-white font-sans">
-  <div class="min-h-full">
-
-    <!-- Header -->
-    <header class="bg-white shadow-lg border-b-4 border-blue-600">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div class="flex flex-col md:flex-row justify-between items-center">
-          <div class="mb-4 md:mb-0">
-            <h1 id="site-title" class="text-3xl font-bold text-blue-900">Curefly Global</h1>
-            <p id="tagline" class="text-lg text-blue-700 mt-1">Find World-Class Healthcare</p>
-          </div>
-
-          <div class="flex flex-col sm:flex-row gap-4">
-            <div class="text-center">
-              <p class="text-sm text-gray-600">Local Helpdesk</p>
-              <p id="local-helpdesk" class="text-lg font-semibold text-blue-900">+91-11-4567-8900</p>
-            </div>
-            <div class="text-center">
-              <p class="text-sm text-gray-600">International Helpdesk</p>
-              <p id="international-helpdesk" class="text-lg font-semibold text-green-700">+1-800-123-4567</p>
-            </div>
-          </div>
-        </div>
+ </head>
+ <body class="h-full bg-gradient-to-br from-blue-50 to-white font-sans">
+  <div class="min-h-full"><!-- Header -->
+   <header class="bg-white shadow-lg border-b-4 border-blue-600">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+     <div class="flex flex-col md:flex-row justify-between items-center">
+      <div class="mb-4 md:mb-0">
+       <h1 id="site-title" class="text-3xl font-bold text-blue-900">Curefly Global</h1>
+       <p id="tagline" class="text-lg text-blue-700 mt-1">Find World-Class Healthcare</p>
       </div>
-    </header>
-
-    <!-- Search Section -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">Search NABH Accredited Hospitals</h2>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Select City</label>
-            <select id="city-select"
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-              <option value="">Choose a city...</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Specialty (Optional)</label>
-            <select id="specialty-select"
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-              <option value="">All Specialties</option>
-            </select>
-          </div>
-
-          <div class="flex items-end">
-            <button id="search-btn"
-              class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg">
-              Search Hospitals
-            </button>
-          </div>
-        </div>
+      <div class="flex flex-col sm:flex-row gap-4">
+       <div class="text-center">
+        <p class="text-sm text-gray-600">Local Helpdesk</p>
+        <p id="local-helpdesk" class="text-lg font-semibold text-blue-900">+91-11-4567-8900</p>
+       </div>
+       <div class="text-center">
+        <p class="text-sm text-gray-600">International Helpdesk</p>
+        <p id="international-helpdesk" class="text-lg font-semibold text-green-700">+1-800-123-4567</p>
+       </div>
       </div>
-
-      <!-- Results Section -->
-      <div id="results-section" class="hidden">
-        <div class="flex justify-between items-center mb-6">
-          <h3 class="text-2xl font-bold text-gray-900">Search Results</h3>
-          <span id="results-count" class="text-gray-600"></span>
-        </div>
-
-        <div id="hospitals-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-6"></div>
-      </div>
-
-      <!-- No Results -->
-      <div id="no-results" class="hidden text-center py-12">
-        <div class="text-gray-500">
-          <svg class="mx-auto h-12 w-12 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.47-.881-6.08-2.33" />
-          </svg>
-          <h3 class="text-lg font-medium text-gray-900 mb-2">No hospitals found</h3>
-          <p class="text-gray-500">Please select a city to view available hospitals.</p>
-        </div>
-      </div>
-    </main>
-
-    <!-- Modal -->
-    <div id="hospital-modal"
-      class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div class="bg-white rounded-xl max-w-4xl w-full max-h-[90%] overflow-y-auto">
-        <div class="p-6">
-          <div class="flex justify-between items-start mb-4">
-            <h2 id="modal-hospital-name" class="text-2xl font-bold text-gray-900"></h2>
-            <button id="close-modal" class="text-gray-400 hover:text-gray-600">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-          <div id="modal-content"></div>
-        </div>
-      </div>
+     </div>
     </div>
-<script>
-// ------------------------------
-// Load Google-Enriched JSON File
-// ------------------------------
-let hospitalList = [];
-let hospitalData = {};   // grouped by city
+   </header><!-- Search Section -->
+   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+     <h2 class="text-2xl font-bold text-gray-900 mb-6">Search NABH Accredited Hospitals</h2>
+     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div><label for="city-select" class="block text-sm font-medium text-gray-700 mb-2">Select City</label> <select id="city-select" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"> <option value="">Choose a city...</option> </select>
+      </div>
+      <div><label for="specialty-select" class="block text-sm font-medium text-gray-700 mb-2">Specialty (Optional)</label> <select id="specialty-select" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"> <option value="">All Specialties</option> <option value="cardiology">Cardiology</option> <option value="orthopedics">Orthopedics</option> <option value="oncology">Oncology</option> <option value="neurology">Neurology</option> <option value="gastroenterology">Gastroenterology</option> </select>
+      </div>
+      <div class="flex items-end"><button id="search-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200"> Search Hospitals </button>
+      </div>
+     </div>
+    </div><!-- Results Section -->
+    <div id="results-section" class="hidden">
+     <div class="flex justify-between items-center mb-6">
+      <h3 class="text-2xl font-bold text-gray-900">Search Results</h3><span id="results-count" class="text-gray-600"></span>
+     </div>
+     <div id="hospitals-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-6"><!-- Hospital cards will be inserted here -->
+     </div>
+    </div><!-- No Results Message -->
+    <div id="no-results" class="hidden text-center py-12">
+     <div class="text-gray-500">
+      <svg class="mx-auto h-12 w-12 mb-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.47-.881-6.08-2.33" />
+      </svg>
+      <h3 class="text-lg font-medium text-gray-900 mb-2">No hospitals found</h3>
+      <p class="text-gray-500">Please select a city to view available hospitals.</p>
+     </div>
+    </div>
+   </main><!-- Features Overview Section -->
+   <section class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="text-center mb-12">
+      <h2 class="text-4xl font-bold mb-4">What You'll Find on Our Platform</h2>
+      <p class="text-xl text-blue-100">Comprehensive medical tourism services for international patients</p>
+     </div>
+     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div class="text-center">
+       <div class="bg-white bg-opacity-20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8" fill="currentColor" viewbox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+       </div>
+       <h3 class="text-lg font-semibold mb-2">NABH Verified Hospitals</h3>
+       <p class="text-blue-100 text-sm">Only accredited hospitals with international quality standards</p>
+      </div>
+      <div class="text-center">
+       <div class="bg-white bg-opacity-20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8" fill="currentColor" viewbox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
+        </svg>
+       </div>
+       <h3 class="text-lg font-semibold mb-2">Expert Doctors</h3>
+       <p class="text-blue-100 text-sm">Detailed profiles with patient reviews and success rates</p>
+      </div>
+      <div class="text-center">
+       <div class="bg-white bg-opacity-20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8" fill="currentColor" viewbox="0 0 20 20"><path d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" />
+        </svg>
+       </div>
+       <h3 class="text-lg font-semibold mb-2">Transparent Pricing</h3>
+       <p class="text-blue-100 text-sm">Clear surgery costs with no hidden fees</p>
+      </div>
+      <div class="text-center">
+       <div class="bg-white bg-opacity-20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+        </svg>
+       </div>
+       <h3 class="text-lg font-semibold mb-2">Travel Assistance</h3>
+       <p class="text-blue-100 text-sm">Airport navigation and local support services</p>
+      </div>
+     </div>
+    </div>
+   </section><!-- Services Grid -->
+   <section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 mb-4">Complete Medical Tourism Services</h2>
+      <p class="text-lg text-gray-600">Everything you need for your medical journey to India</p>
+     </div>
+     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+       <div class="text-blue-600 mb-4">
+        <svg class="w-12 h-12" fill="currentColor" viewbox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+       </div>
+       <h3 class="text-xl font-semibold mb-3">Hospital Verification</h3>
+       <ul class="text-gray-600 space-y-2">
+        <li>• NABH &amp; JCI accreditation status</li>
+        <li>• International patient facilities</li>
+        <li>• Quality certifications</li>
+        <li>• Success rate statistics</li>
+       </ul>
+      </div>
+      <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+       <div class="text-green-600 mb-4">
+        <svg class="w-12 h-12" fill="currentColor" viewbox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
+        </svg>
+       </div>
+       <h3 class="text-xl font-semibold mb-3">Doctor Profiles</h3>
+       <ul class="text-gray-600 space-y-2">
+        <li>• Detailed qualifications &amp; experience</li>
+        <li>• Patient reviews &amp; ratings</li>
+        <li>• Success rates by procedure</li>
+        <li>• International training background</li>
+       </ul>
+      </div>
+      <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+       <div class="text-purple-600 mb-4">
+        <svg class="w-12 h-12" fill="currentColor" viewbox="0 0 20 20"><path d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" />
+        </svg>
+       </div>
+       <h3 class="text-xl font-semibold mb-3">Cost Transparency</h3>
+       <ul class="text-gray-600 space-y-2">
+        <li>• Detailed procedure pricing</li>
+        <li>• Package deals with accommodation</li>
+        <li>• Insurance compatibility</li>
+        <li>• Payment plan options</li>
+       </ul>
+      </div>
+      <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+       <div class="text-red-600 mb-4">
+        <svg class="w-12 h-12" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+        </svg>
+       </div>
+       <h3 class="text-xl font-semibold mb-3">Travel Navigation</h3>
+       <ul class="text-gray-600 space-y-2">
+        <li>• Airport to hospital directions</li>
+        <li>• Public transport options</li>
+        <li>• Taxi &amp; ride-sharing info</li>
+        <li>• Nearby accommodation</li>
+       </ul>
+      </div>
+      <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+       <div class="text-indigo-600 mb-4">
+        <svg class="w-12 h-12" fill="currentColor" viewbox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+        </svg>
+       </div>
+       <h3 class="text-xl font-semibold mb-3">24/7 Support</h3>
+       <ul class="text-gray-600 space-y-2">
+        <li>• Local &amp; international helplines</li>
+        <li>• Multi-language support</li>
+        <li>• Emergency assistance</li>
+        <li>• Pre &amp; post-treatment care</li>
+       </ul>
+      </div>
+     </div>
+    </div>
+   </section><!-- Patient Testimonials -->
+   <section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 mb-4">What Our International Patients Say</h2>
+      <p class="text-lg text-gray-600">Real experiences from patients who chose India for their medical care</p>
+     </div>
+     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl shadow-lg">
+       <div class="flex items-center mb-4">
+        <div class="star-rating text-lg">
+         ★★★★★
+        </div><span class="ml-2 text-sm text-gray-600">5.0</span>
+       </div>
+       <p class="text-gray-700 mb-4">"Exceptional cardiac surgery at AIIMS Delhi. Dr. Rajesh Kumar saved my life with his expertise. The international patient care was outstanding."</p>
+       <div class="flex items-center">
+        <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold">
+         JM
+        </div>
+        <div class="ml-3">
+         <p class="font-medium">James Mitchell</p>
+         <p class="text-sm text-gray-600">USA • Heart Surgery</p>
+        </div>
+       </div>
+      </div>
+      <div class="bg-gradient-to-br from-green-50 to-white p-6 rounded-xl shadow-lg">
+       <div class="flex items-center mb-4">
+        <div class="star-rating text-lg">
+         ★★★★★
+        </div><span class="ml-2 text-sm text-gray-600">5.0</span>
+       </div>
+       <p class="text-gray-700 mb-4">"My cancer treatment at Tata Memorial was world-class. Dr. Vikram Patel's care and the hospital facilities exceeded expectations."</p>
+       <div class="flex items-center">
+        <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white font-semibold">
+         SA
+        </div>
+        <div class="ml-3">
+         <p class="font-medium">Sarah Ahmed</p>
+         <p class="text-sm text-gray-600">UK • Oncology</p>
+        </div>
+       </div>
+      </div>
+      <div class="bg-gradient-to-br from-purple-50 to-white p-6 rounded-xl shadow-lg">
+       <div class="flex items-center mb-4">
+        <div class="star-rating text-lg">
+         ★★★★★
+        </div><span class="ml-2 text-sm text-gray-600">4.9</span>
+       </div>
+       <p class="text-gray-700 mb-4">"Knee replacement surgery at Narayana Health was perfect. Dr. Devi Shetty's team provided excellent care at affordable costs."</p>
+       <div class="flex items-center">
+        <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center text-white font-semibold">
+         MK
+        </div>
+        <div class="ml-3">
+         <p class="font-medium">Michael Kim</p>
+         <p class="text-sm text-gray-600">Canada • Orthopedics</p>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section>
+  </div><!-- Hospital Detail Modal -->
+  <div id="hospital-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+   <div class="bg-white rounded-xl max-w-4xl w-full max-h-[90%] overflow-y-auto">
+    <div class="p-6">
+     <div class="flex justify-between items-start mb-4">
+      <h2 id="modal-hospital-name" class="text-2xl font-bold text-gray-900"></h2><button id="close-modal" class="text-gray-400 hover:text-gray-600">
+       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+       </svg></button>
+     </div>
+     <div id="modal-content"><!-- Modal content will be inserted here -->
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+        // This index.html loads data from the file: nabh_google_enriched.json (root folder).
+        // It preserves your Canva UI exactly and injects the fetched data into the same display/ modal logic.
+        const citySelect = document.getElementById('city-select');
+        const specialtySelect = document.getElementById('specialty-select');
+        const searchBtn = document.getElementById('search-btn');
+        const resultsSection = document.getElementById('results-section');
+        const hospitalsGrid = document.getElementById('hospitals-grid');
+        const resultsCount = document.getElementById('results-count');
+        const noResults = document.getElementById('no-results');
+        const hospitalModal = document.getElementById('hospital-modal');
+        const closeModal = document.getElementById('close-modal');
 
-async function loadHospitalJSON() {
-    try {
-        const res = await fetch("nabh_google_enriched.json");
-        hospitalList = await res.json();
+        // normalize helper
+        function normalizeKey(s){ return (s||'').toString().trim().toLowerCase(); }
 
-        console.log("Loaded enriched hospitals:", hospitalList.length);
+        // Build hospitalData from enriched JSON
+        let hospitalData = {}; // cityKey => array of hospital records
 
-        buildCityMap();
-        populateCitySelect();
-        populateSpecialtySelect();
-    } catch (err) {
-        console.error("Error loading JSON:", err);
-    }
-}
+        async function loadEnrichedJson() {
+          try {
+            const resp = await fetch('./nabh_google_enriched.json', {cache: "no-store"});
+            if (!resp.ok) throw new Error('HTTP ' + resp.status);
+            const data = await resp.json();
+            return data;
+          } catch (err) {
+            console.error('Failed to load nabh_google_enriched.json:', err);
+            return null;
+          }
+        }
 
-// ------------------------------
-// Build city -> hospitals mapping
-// ------------------------------
-function normalizeCity(c) {
-    return (c || "").trim().toLowerCase();
-}
+        function mapEnrichedToRecords(list) {
+          const map = {};
+          (list || []).forEach((h, idx) => {
+            const cityKey = normalizeKey(h.city || h.address || h.source_record?.city || h.source_record?.City || 'unknown');
+            if (!map[cityKey]) map[cityKey] = [];
+            const rec = {
+              id: 'g-' + (h.place_id || ('idx'+idx)),
+              name: h.name || h.hospital_name || 'Unnamed Hospital',
+              nabh: true,
+              rating: h.rating || null,
+              reviews: h.reviews || null,
+              specialties: h.specialties || h.source_record?.specialties || (h.tags||[]).slice(0,5) || [],
+              address: h.address || (h.source_record && (h.source_record.address || h.source_record.city)) || '',
+              phone: h.phone || h.international_phone || h.source_record?.phone || '',
+              website: h.website || h.url || h.source_record?.website || '',
+              doctors: h.doctors || h.source_record?.doctors || [],
+              surgeries: h.surgeries || h.surgeryPackages || h.source_record?.surgeryPackages || [],
+              nearestAirport: h.nearest_airport || h.nearestAirport || '',
+              navigation: h.navigation_url || h.navigation || (h.lat && h.lng ? `https://www.google.com/maps/dir/?api=1&destination=${h.lat},${h.lng}` : ''),
+              lat: h.lat || null,
+              lng: h.lng || null,
+              place_id: h.place_id || null,
+              google_found: !!h.google_found,
+              source_record: h.source_record || null
+            };
+            map[cityKey].push(rec);
+          });
+          return map;
+        }
 
-function buildCityMap() {
-    hospitalData = {};
+        function populateCitySelect() {
+          // clear existing dynamic options (keep the 'Choose a city...' placeholder)
+          const placeholder = citySelect.querySelector('option[value=""]');
+          citySelect.innerHTML = '';
+          citySelect.appendChild(placeholder);
+          const cities = Object.keys(hospitalData).sort();
+          cities.forEach(k => {
+            const opt = document.createElement('option');
+            opt.value = k;
+            opt.textContent = k.split(' ').map(w=> w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
+            citySelect.appendChild(opt);
+          });
+          // ensure kolkata present
+          if (!Object.keys(hospitalData).includes('kolkata')) {
+            const opt = document.createElement('option');
+            opt.value = 'kolkata'; opt.textContent = 'Kolkata';
+            citySelect.appendChild(opt);
+            if (!hospitalData['kolkata']) hospitalData['kolkata'] = [];
+          }
+        }
 
-    hospitalList.forEach((h, i) => {
-        const city = normalizeCity(h.source_record?.city || "");
-        if (!city) return;
-
-        if (!hospitalData[city]) hospitalData[city] = [];
-
-        hospitalData[city].push({
-            id: i + 1,
-            name: h.name,
-            rating: h.rating,
-            reviews: h.reviews,
-            address: h.address,
-            phone: h.phone,
-            website: h.website,
-            specialties: h.source_record?.specialties || [],
-            doctors: h.source_record?.doctors || [],
-            surgeries: h.source_record?.surgeryPackages || [],
-            nearestAirport: h.nearest_airport || "",
-            navigation: h.navigation_url || ""
-        });
-    });
-
-    console.log("Grouped data:", hospitalData);
-}
-
-// ------------------------------
-// Populate city dropdown
-// ------------------------------
-function populateCitySelect() {
-    const select = document.getElementById("city-select");
-
-    Object.keys(hospitalData).forEach(city => {
-        const opt = document.createElement("option");
-        opt.value = city;
-        opt.textContent = city.charAt(0).toUpperCase() + city.slice(1);
-        select.appendChild(opt);
-    });
-}
-
-// ------------------------------
-// Populate specialty dropdown
-// ------------------------------
-function populateSpecialtySelect() {
-    const specialtySelect = document.getElementById("specialty-select");
-    const specialtySet = new Set();
-
-    hospitalList.forEach(h => {
-        const specs = h.source_record?.specialties || [];
-        specs.forEach(s => specialtySet.add(s));
-    });
-
-    specialtySet.forEach(s => {
-        const opt = document.createElement("option");
-        opt.value = s;
-        opt.textContent = s;
-        specialtySelect.appendChild(opt);
-    });
-}
-
-// ------------------------------
-// SEARCH FUNCTION
-// ------------------------------
-function performSearch() {
-    const city = normalizeCity(document.getElementById("city-select").value);
-    const specialty = document.getElementById("specialty-select").value.toLowerCase();
-
-    if (!city || !hospitalData[city]) {
-        showNoResults();
-        return;
-    }
-
-    let results = hospitalData[city];
-
-    if (specialty) {
-        results = results.filter(h =>
-            h.specialties.some(s => s.toLowerCase().includes(specialty))
-        );
-    }
-
-    if (results.length === 0) showNoResults();
-    else displayResults(results);
-}
-
-// ------------------------------
-// SHOW RESULTS (Canva design preserved)
-// ------------------------------
-function displayResults(hospitals) {
-    document.getElementById("no-results").classList.add("hidden");
-    document.getElementById("results-section").classList.remove("hidden");
-
-    document.getElementById("results-count").textContent =
-        `${hospitals.length} hospital(s) found`;
-
-    const container = document.getElementById("hospitals-grid");
-    container.innerHTML = "";
-
-    hospitals.forEach(hospital => {
-        const card = `
-            <div class="hospital-card bg-white rounded-lg shadow-md p-6 cursor-pointer"
-                 onclick="showHospitalDetails(${hospital.id})">
-
-                <div class="flex justify-between items-start mb-4">
-                    <div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">${hospital.name}</h3>
-                        <span class="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">
-                            NABH Accredited
-                        </span>
-                    </div>
-
-                    <div class="text-right">
-                        ${hospital.rating ? `
+        function renderHospitalCards(list) {
+          hospitalsGrid.innerHTML = list.map(hospital => `
+                <div class="hospital-card bg-white rounded-lg shadow-md p-6 cursor-pointer" data-id="${hospital.id}">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">${escapeHtml(hospital.name)}</h3>
+                            <div class="flex items-center mb-2">
+                                <span class="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">NABH Accredited</span>
+                            </div>
+                        </div>
+                        <div class="text-right">
                             <div class="flex items-center">
                                 <span class="star-rating text-lg">★</span>
-                                <span class="ml-1 font-semibold">${hospital.rating}</span>
+                                <span class="ml-1 font-semibold">${hospital.rating || ''}</span>
                             </div>
-                            <p class="text-sm text-gray-600">${hospital.reviews} reviews</p>
-                        ` : ""}
+                            <p class="text-sm text-gray-600">${hospital.reviews ? hospital.reviews + ' reviews' : ''}</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="text-gray-600 mb-2">${escapeHtml(hospital.address)}</p>
+                        <p class="text-blue-600 font-medium">${escapeHtml(hospital.phone)}</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <h4 class="font-semibold text-gray-900 mb-2">Specialties:</h4>
+                        <div class="flex flex-wrap gap-2">
+                            ${(hospital.specialties || []).map(specialty => `<span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">${escapeHtml(specialty)}</span>`).join('')}
+                        </div>
+                    </div>
+
+                    <div class="border-t pt-4">
+                        <p class="text-sm text-gray-600 mb-2"><strong>Nearest Airport:</strong> ${escapeHtml(hospital.nearestAirport || hospital.nearestAirport || '')}</p>
+                        <button class="text-blue-600 hover:text-blue-800 font-medium text-sm view-details-btn">View Details & Navigation →</button>
                     </div>
                 </div>
+            `).join('');
+        }
 
-                <p class="text-gray-600 mb-2">${hospital.address}</p>
-                <p class="text-blue-600 font-medium">${hospital.phone || ""}</p>
+        function escapeHtml(str) {
+          if (!str && str !== 0) return '';
+          return String(str)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+        }
 
-                <div class="mt-4">
-                    <h4 class="font-semibold text-gray-900 mb-2">Specialties:</h4>
-                    <div class="flex flex-wrap gap-2">
-                        ${hospital.specialties.map(s =>
-                            `<span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">${s}</span>`
-                        ).join("")}
-                    </div>
+        function showNoResults() {
+          resultsSection.classList.add('hidden');
+          noResults.classList.remove('hidden');
+        }
+
+        function showResults(list) {
+          noResults.classList.add('hidden');
+          resultsSection.classList.remove('hidden');
+          resultsCount.textContent = `${list.length} hospital(s) found`;
+          renderHospitalCards(list);
+          // attach handlers after DOM update
+          setTimeout(attachCardHandlers, 40);
+        }
+
+        function performSearch() {
+          const selectedCity = normalizeKey(citySelect.value);
+          const selectedSpecialty = (specialtySelect.value || '').toLowerCase();
+
+          if (!selectedCity) { showNoResults(); return; }
+
+          const hospitals = (hospitalData[selectedCity] || []).slice();
+          if (!hospitals || hospitals.length === 0) { showNoResults(); return; }
+
+          let filtered = hospitals;
+          if (selectedSpecialty) {
+            filtered = hospitals.filter(h => (h.specialties || []).some(s => s.toLowerCase().includes(selectedSpecialty)));
+          }
+
+          if (!filtered.length) showNoResults();
+          else showResults(filtered);
+        }
+
+        function attachCardHandlers() {
+          hospitalsGrid.querySelectorAll('.hospital-card').forEach(card => {
+            const btn = card.querySelector('.view-details-btn');
+            const id = card.getAttribute('data-id');
+            btn?.addEventListener('click', () => showHospitalDetails(id));
+          });
+        }
+
+        function showHospitalDetails(id) {
+          const hospital = Object.values(hospitalData).flat().find(h => h.id === id);
+          if (!hospital) return;
+          document.getElementById('modal-hospital-name').textContent = hospital.name;
+          const websiteHtml = hospital.website ? `<p><strong>Website:</strong> <a href="${hospital.website}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800">${hospital.website}</a></p>` : '';
+          const ratingHtml = hospital.rating ? `<p><strong>Rating:</strong> ★ ${hospital.rating} (${hospital.reviews || 0} reviews)</p>` : '';
+          const doctorsHtml = (hospital.doctors || []).map(d => `
+            <div class="bg-gray-50 p-4 rounded-lg border-l-4 border-blue-500 mb-3">
+              <div class="flex justify-between items-start mb-2">
+                <div>
+                  <p class="font-semibold text-lg">${escapeHtml(d.name || 'Dr. —')}</p>
+                  <p class="text-blue-600 font-medium">${escapeHtml(d.specialty || '')}</p>
                 </div>
-
-                <div class="border-t pt-4 mt-4">
-                    <p class="text-sm text-gray-600"><strong>Nearest Airport:</strong> ${hospital.nearestAirport}</p>
-                    <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">
-                        View Details & Navigation →
-                    </button>
+                <div class="text-right">
+                  ${d.rating ? `<div class="flex items-center"><span class="star-rating text-lg">★</span><span class="ml-1 font-semibold">${escapeHtml(d.rating)}</span></div>` : ''}
+                  ${d.reviews ? `<p class="text-sm text-gray-600">${escapeHtml(d.reviews)}</p>` : ''}
                 </div>
+              </div>
+              <p class="text-sm text-gray-700 mb-2">${escapeHtml(d.qualifications || '')}</p>
+              <div class="flex justify-between items-center text-sm">
+                <span class="text-gray-600">${escapeHtml(d.experience || '')} experience</span>
+                ${d.consultationFee ? `<span class="text-green-600 font-medium">Consultation: ${escapeHtml(d.consultationFee)}</span>` : ''}
+              </div>
+              ${d.languages ? `<p class="text-xs text-gray-500 mt-1">Languages: ${escapeHtml((d.languages||[]).join(', '))}</p>` : ''}
             </div>
-        `;
-        container.innerHTML += card;
-    });
-}
+          `).join('') || '<p class="text-gray-600">Doctor details not provided.</p>';
 
-// ------------------------------
-// No results
-// ------------------------------
-function showNoResults() {
-    document.getElementById("results-section").classList.add("hidden");
-    document.getElementById("no-results").classList.remove("hidden");
-}
-<script>
-// -----------------------------------------
-// SHOW HOSPITAL DETAILS (CANVA DESIGN EXACT)
-// -----------------------------------------
-function showHospitalDetails(id) {
-
-    const hospital = hospitalList[id - 1];
-    if (!hospital) return;
-
-    document.getElementById("modal-hospital-name").textContent = hospital.name;
-
-    const specs = hospital.source_record?.specialties || [];
-    const doctors = hospital.source_record?.doctors || [];
-    const surgeries = hospital.source_record?.surgeryPackages || [];
-
-    document.getElementById("modal-content").innerHTML = `
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-            <!-- Hospital Info -->
-            <div>
+          modalContent.innerHTML = `
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div>
                 <h3 class="text-lg font-semibold mb-3">Hospital Information</h3>
                 <div class="space-y-2 mb-6">
-                    <p><strong>Address:</strong> ${hospital.address || ""}</p>
-                    <p><strong>Phone:</strong> ${hospital.phone || ""}</p>
-                    ${hospital.website ? `<p><strong>Website:</strong> 
-                        <a href="${hospital.website}" target="_blank" class="text-blue-600 hover:text-blue-800">
-                            ${hospital.website}
-                        </a></p>` : ""}
-                    ${hospital.rating ? `<p><strong>Rating:</strong> ★ ${hospital.rating} (${hospital.reviews} reviews)</p>` : ""}
-                    <p><strong>NABH Accredited:</strong> <span class="text-green-600">✓ Yes</span></p>
+                  <p><strong>Address:</strong> ${escapeHtml(hospital.address || '')}</p>
+                  <p><strong>Phone:</strong> ${escapeHtml(hospital.phone || '')}</p>
+                  ${websiteHtml}
+                  ${ratingHtml}
+                  <p><strong>NABH Accredited:</strong> <span class="text-green-600">✓ Yes</span></p>
                 </div>
 
-                <h3 class="text-lg font-semibold mb-3">Specialist Doctors</h3>
-                <div class="space-y-4">
-                    ${doctors.length === 0 ? `
-                        <p class="text-gray-600">Doctor details not available.</p>
-                    ` :
-                    doctors.map(doc => `
-                        <div class="bg-gray-50 p-4 rounded-lg border-l-4 border-blue-500">
+                <h3 class="text-lg font-semibold mb-3">All Specialist Doctors</h3>
+                <div class="space-y-4 mb-6">${doctorsHtml}</div>
+              </div>
 
-                            <div class="flex justify-between items-start mb-2">
-                                <div>
-                                    <p class="font-semibold text-lg">${doc.name}</p>
-                                    <p class="text-blue-600 font-medium">${doc.specialty || ""}</p>
-                                </div>
-                                <div class="text-right">
-                                    ${doc.rating ? `
-                                        <div class="flex items-center">
-                                            <span class="star-rating text-lg">★</span>
-                                            <span class="ml-1 font-semibold">${doc.rating}</span>
-                                        </div>
-                                        <p class="text-sm text-gray-600">${doc.reviews} reviews</p>
-                                    ` : ""}
-                                </div>
-                            </div>
-
-                            <p class="text-sm text-gray-700 mb-2">${doc.qualifications || ""}</p>
-
-                            <div class="flex justify-between items-center text-sm">
-                                <span class="text-gray-600">${doc.experience || ""}</span>
-                                ${doc.consultationFee ? `<span class="text-green-600 font-medium">
-                                    Consultation: ${doc.consultationFee}
-                                </span>` : ""}
-                            </div>
-
-                            ${doc.languages ? `
-                                <p class="text-xs text-gray-500 mt-1">
-                                    Languages: ${doc.languages.join(", ")}
-                                </p>` : ""}
-
-                        </div>
-                    `).join("")}
-                </div>
-            </div>
-
-            <!-- Surgeries + Navigation -->
-            <div>
+              <div>
                 <h3 class="text-lg font-semibold mb-3">Popular Surgery Costs</h3>
-
                 <div class="space-y-3 mb-6">
-                    ${surgeries.length === 0 ? `
-                        <p class="text-gray-600">Surgery cost details not available.</p>
-                    ` :
-                    surgeries.map(s => `
-                        <div class="bg-blue-50 p-3 rounded-lg">
-                            <p class="font-medium">${s.name || s.title || "Procedure"}</p>
-                            <p class="text-blue-600 font-semibold">${s.cost || s.price || ""}</p>
-                        </div>
-                    `).join("")}
+                  ${(hospital.surgeries || []).map(s => `<div class="bg-blue-50 p-3 rounded-lg"><p class="font-medium">${escapeHtml(s.name || s.title || 'Procedure')}</p><p class="text-blue-600 font-semibold">${escapeHtml(s.cost || s.price || '')}</p></div>`).join('') || '<p class="text-gray-600">Surgery price details not provided.</p>'}
                 </div>
 
                 <h3 class="text-lg font-semibold mb-3">Airport Navigation</h3>
-
                 <div class="bg-green-50 p-4 rounded-lg">
-                    <p class="font-medium mb-2">From ${hospital.nearest_airport || "Nearest Airport Not Available"}</p>
-                    <p class="text-sm text-gray-700">${hospital.navigation_url ? "Click below for navigation." : "No navigation info available."}</p>
-
-                    ${hospital.navigation_url ? `
-                        <button class="mt-3 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm"
-                            onclick="window.open('${hospital.navigation_url}', '_blank')">
-                            Open in Google Maps
-                        </button>
-                    ` : ""}
+                  <p class="font-medium mb-2">From ${escapeHtml(hospital.nearestAirport || hospital.nearest_airport || '—')}</p>
+                  <p class="text-sm text-gray-700">${escapeHtml(hospital.navigation || hospital.navigation_url || 'Navigation details not provided.')}</p>
+                  ${hospital.navigation ? `<button class="mt-3 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm" onclick="window.open('${hospital.navigation}','_blank')">Open in Google Maps</button>`
+                    : hospital.lat && hospital.lng ? `<button class="mt-3 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm" onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=${hospital.lat},${hospital.lng}','_blank')">Open in Google Maps</button>` : ''}
                 </div>
+              </div>
             </div>
+          `;
+          hospitalModal.classList.remove('hidden');
+        }
 
-        </div>
-    `;
+        // close handlers
+        closeModal?.addEventListener('click', () => { hospitalModal.classList.add('hidden'); });
+        hospitalModal?.addEventListener('click', (e) => { if (e.target === hospitalModal) hospitalModal.classList.add('hidden'); });
 
-    document.getElementById("hospital-modal").classList.remove("hidden");
-}
+        // wire UI buttons
+        searchBtn?.addEventListener('click', () => { performSearch(); });
+        citySelect?.addEventListener('change', () => { performSearch(); });
+        specialtySelect?.addEventListener('change', () => { performSearch(); });
 
-// ----------------------------------
-// Close Modal (no design changed)
-// ----------------------------------
-document.getElementById("close-modal").addEventListener("click", () => {
-    document.getElementById("hospital-modal").classList.add("hidden");
-});
+        // Initialization
+        (async function init() {
+          const list = await loadEnrichedJson();
+          if (!list) {
+            console.warn('No enriched data found. Make sure nabh_google_enriched.json is in the same folder as this index.html');
+            showNoResults();
+            return;
+          }
+          // map list -> records grouped by city
+          hospitalData = mapEnrichedToRecords(list);
+          populateCitySelect();
+          console.info('Loaded enriched hospitals. Cities:', Object.keys(hospitalData).length);
+        })();
 
-document.getElementById("hospital-modal").addEventListener("click", (e) => {
-    if (e.target === document.getElementById("hospital-modal")) {
-        document.getElementById("hospital-modal").classList.add("hidden");
-    }
-});
-
-// ----------------------------------
-// INITIALIZE WEBSITE
-// ----------------------------------
-window.onload = function() {
-    loadHospitalJSON();
-
-    document.getElementById("search-btn").addEventListener("click", performSearch);
-    document.getElementById("city-select").addEventListener("change", performSearch);
-    document.getElementById("specialty-select").addEventListener("change", performSearch);
-};
-</script>
+    </script>
+ </body>
+</html>
