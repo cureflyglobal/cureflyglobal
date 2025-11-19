@@ -1,11 +1,9 @@
 <!doctype html>
-
 <html lang="en" class="h-full">
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Curefly Global - Find World-Class Healthcare</title>
-  <script src="/_sdk/element_sdk.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
         body {
@@ -23,11 +21,9 @@
         }
     </style>
   <style>@view-transition { navigation: auto; }</style>
-  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
  </head>
  <body class="h-full bg-gradient-to-br from-blue-50 to-white font-sans">
-  <div class="min-h-full"><!-- Header -->
-   <header class="bg-white shadow-lg border-b-4 border-blue-600">
+  <div class="min-h-full"><header class="bg-white shadow-lg border-b-4 border-blue-600">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
      <div class="flex flex-col md:flex-row justify-between items-center">
       <div class="mb-4 md:mb-0">
@@ -46,27 +42,36 @@
       </div>
      </div>
     </div>
-   </header><!-- Search Section -->
-   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+   </header><main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  
     <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
      <h2 class="text-2xl font-bold text-gray-900 mb-6">Search NABH Accredited Hospitals</h2>
      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div><label for="city-select" class="block text-sm font-medium text-gray-700 mb-2">Select City</label> <select id="city-select" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"> <option value="">Choose a city...</option> </select>
+      <div>
+          <label for="city-select" class="block text-sm font-medium text-gray-700 mb-2">Select City</label> 
+          <select id="city-select" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"> 
+              <option value="">Choose a city...</option> 
+              </select>
       </div>
-      <div><label for="specialty-select" class="block text-sm font-medium text-gray-700 mb-2">Specialty (Optional)</label> <select id="specialty-select" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"> <option value="">All Specialties</option> <option value="cardiology">Cardiology</option> <option value="orthopedics">Orthopedics</option> <option value="oncology">Oncology</option> <option value="neurology">Neurology</option> <option value="gastroenterology">Gastroenterology</option> </select>
+      <div>
+          <label for="specialty-select" class="block text-sm font-medium text-gray-700 mb-2">Specialty (Optional)</label> 
+          <select id="specialty-select" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"> 
+              <option value="">All Specialties</option> 
+              <option value="Cardiology">Cardiology</option> 
+              <option value="Orthopedics">Orthopedics</option> 
+              <option value="Oncology">Oncology</option> 
+              <option value="General Surgery">General Surgery</option> 
+          </select>
       </div>
       <div class="flex items-end"><button id="search-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200"> Search Hospitals </button>
       </div>
      </div>
-    </div><!-- Results Section -->
-    <div id="results-section" class="hidden">
+    </div><div id="results-section" class="hidden">
      <div class="flex justify-between items-center mb-6">
       <h3 class="text-2xl font-bold text-gray-900">Search Results</h3><span id="results-count" class="text-gray-600"></span>
      </div>
-     <div id="hospitals-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-6"><!-- Hospital cards will be inserted here -->
-     </div>
-    </div><!-- No Results Message -->
-    <div id="no-results" class="hidden text-center py-12">
+     <div id="hospitals-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-6"></div>
+    </div><div id="no-results" class="hidden text-center py-12">
      <div class="text-gray-500">
       <svg class="mx-auto h-12 w-12 mb-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.47-.881-6.08-2.33" />
       </svg>
@@ -74,8 +79,7 @@
       <p class="text-gray-500">Please select a city to view available hospitals.</p>
      </div>
     </div>
-   </main><!-- Features Overview Section -->
-   <section class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+   </main><section class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
      <div class="text-center mb-12">
       <h2 class="text-4xl font-bold mb-4">What You'll Find on Our Platform</h2>
@@ -91,12 +95,14 @@
        <p class="text-blue-100 text-sm">Only accredited hospitals with international quality standards</p>
       </div>
       <div class="text-center">
+       
        <div class="bg-white bg-opacity-20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
         <svg class="w-8 h-8" fill="currentColor" viewbox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
         </svg>
        </div>
        <h3 class="text-lg font-semibold mb-2">Expert Doctors</h3>
        <p class="text-blue-100 text-sm">Detailed profiles with patient reviews and success rates</p>
+      
       </div>
       <div class="text-center">
        <div class="bg-white bg-opacity-20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
@@ -110,18 +116,19 @@
        <div class="bg-white bg-opacity-20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
         <svg class="w-8 h-8" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
         </svg>
+       
        </div>
        <h3 class="text-lg font-semibold mb-2">Travel Assistance</h3>
        <p class="text-blue-100 text-sm">Airport navigation and local support services</p>
       </div>
      </div>
     </div>
-   </section><!-- Services Grid -->
-   <section class="py-16 bg-gray-50">
+   </section><section class="py-16 bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
      <div class="text-center mb-12">
       <h2 class="text-3xl font-bold text-gray-900 mb-4">Complete Medical Tourism Services</h2>
       <p class="text-lg text-gray-600">Everything you need for your medical journey to India</p>
+    
      </div>
      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
@@ -131,7 +138,8 @@
        </div>
        <h3 class="text-xl font-semibold mb-3">Hospital Verification</h3>
        <ul class="text-gray-600 space-y-2">
-        <li>• NABH &amp; JCI accreditation status</li>
+   
+        <li>• NABH & JCI accreditation status</li>
         <li>• International patient facilities</li>
         <li>• Quality certifications</li>
         <li>• Success rate statistics</li>
@@ -139,20 +147,22 @@
       </div>
       <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
        <div class="text-green-600 mb-4">
-        <svg class="w-12 h-12" fill="currentColor" viewbox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
+        <svg class="w-12 h-12" fill="currentColor" viewbox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 
+        0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
         </svg>
        </div>
        <h3 class="text-xl font-semibold mb-3">Doctor Profiles</h3>
        <ul class="text-gray-600 space-y-2">
-        <li>• Detailed qualifications &amp; experience</li>
-        <li>• Patient reviews &amp; ratings</li>
+        <li>• Detailed qualifications & experience</li>
+        <li>• Patient reviews & ratings</li>
         <li>• Success rates by procedure</li>
         <li>• International training background</li>
        </ul>
       </div>
       <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
        <div class="text-purple-600 mb-4">
-        <svg class="w-12 h-12" fill="currentColor" viewbox="0 0 20 20"><path d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" />
+        <svg class="w-12 h-12" fill="currentColor" viewbox="0 0 20 20"><path d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 
+        01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" />
         </svg>
        </div>
        <h3 class="text-xl font-semibold mb-3">Cost Transparency</h3>
@@ -162,6 +172,7 @@
         <li>• Insurance compatibility</li>
         <li>• Payment plan options</li>
        </ul>
+    
       </div>
       <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
        <div class="text-red-600 mb-4">
@@ -170,29 +181,32 @@
        </div>
        <h3 class="text-xl font-semibold mb-3">Travel Navigation</h3>
        <ul class="text-gray-600 space-y-2">
+     
         <li>• Airport to hospital directions</li>
         <li>• Public transport options</li>
-        <li>• Taxi &amp; ride-sharing info</li>
+        <li>• Taxi & ride-sharing info</li>
         <li>• Nearby accommodation</li>
        </ul>
       </div>
       <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
        <div class="text-indigo-600 mb-4">
         <svg class="w-12 h-12" fill="currentColor" viewbox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+       
         </svg>
        </div>
        <h3 class="text-xl font-semibold mb-3">24/7 Support</h3>
        <ul class="text-gray-600 space-y-2">
-        <li>• Local &amp; international helplines</li>
+        <li>• Local & international helplines</li>
         <li>• Multi-language support</li>
         <li>• Emergency assistance</li>
-        <li>• Pre &amp; post-treatment care</li>
+        <li>• Pre & post-treatment care</li>
        </ul>
       </div>
       <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
        <div class="text-orange-600 mb-4">
         <svg class="w-12 h-12" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
         </svg>
+    
        </div>
        <h3 class="text-xl font-semibold mb-3">Appointment Booking</h3>
        <ul class="text-gray-600 space-y-2">
@@ -204,8 +218,7 @@
       </div>
      </div>
     </div>
-   </section><!-- Patient Testimonials -->
-   <section class="py-16 bg-white">
+   </section><section class="py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
      <div class="text-center mb-12">
       <h2 class="text-3xl font-bold text-gray-900 mb-4">What Our International Patients Say</h2>
@@ -215,7 +228,7 @@
       <div class="bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl shadow-lg">
        <div class="flex items-center mb-4">
         <div class="star-rating text-lg">
-         ★★★★★
+        ★★★★★
         </div><span class="ml-2 text-sm text-gray-600">5.0</span>
        </div>
        <p class="text-gray-700 mb-4">"Exceptional cardiac surgery at AIIMS Delhi. Dr. Rajesh Kumar saved my life with his expertise. The international patient care was outstanding."</p>
@@ -227,6 +240,7 @@
          <p class="font-medium">James Mitchell</p>
          <p class="text-sm text-gray-600">USA • Heart Surgery</p>
         </div>
+ 
        </div>
       </div>
       <div class="bg-gradient-to-br from-green-50 to-white p-6 rounded-xl shadow-lg">
@@ -244,6 +258,7 @@
          <p class="font-medium">Sarah Ahmed</p>
          <p class="text-sm text-gray-600">UK • Oncology</p>
         </div>
+       
        </div>
       </div>
       <div class="bg-gradient-to-br from-purple-50 to-white p-6 rounded-xl shadow-lg">
@@ -261,259 +276,520 @@
          <p class="font-medium">Michael Kim</p>
          <p class="text-sm text-gray-600">Canada • Orthopedics</p>
         </div>
+       
        </div>
       </div>
      </div>
     </div>
    </section>
-  </div><!-- Hospital Detail Modal -->
-  <div id="hospital-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+  </div><div id="hospital-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
    <div class="bg-white rounded-xl max-w-4xl w-full max-h-[90%] overflow-y-auto">
     <div class="p-6">
      <div class="flex justify-between items-start mb-4">
       <h2 id="modal-hospital-name" class="text-2xl font-bold text-gray-900"></h2><button id="close-modal" class="text-gray-400 hover:text-gray-600">
        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-       </svg></button>
+   
+        </svg></button>
      </div>
-     <div id="modal-content"><!-- Modal content will be inserted here -->
-     </div>
+     <div id="modal-content"></div>
     </div>
    </div>
   </div>
-
   <script>
-    // Final index.html: loads nabh_google_enriched.json from repository root and displays data using Canva UI (no layout changes)
+        // 1. PASTE YOUR RAW JSON DATA HERE
+        const rawHospitals = [
+          {
+            "name": "Pawana Multispeciality Hospital | Best Orthopedic Hospital | Cardiology | Gynecology | Ophthalmology | Pediatric Hospital",
+            "rating": 4.7,
+            "reviews": 1603,
+            "address": "Gat No- 167 Urse- Parandwadi Road, Taluka, near Talegaon Dabhade, Somatne Phata, Maval, Maharashtra 410506, India",
+            "phone": "077220 49970",
+            "website": "https://www.pawanahospital.com/",
+            "lat": 18.7030595,
+            "lng": 73.6853591,
+            "place_id": "ChIJVVVVlUuwwjsRiwOZeJp_VAk",
+            "google_found": true,
+            "nearest_airport": "Pune International Airport",
+            "navigation_url": "https://www.google.com/maps/dir/?api=1&destination=18.7030595,73.6853591",
+            "source_record": {
+              "name": "Pawana Hospital",
+              "city": "Pune",
+              "international_phone": "",
+              "surgeryPackages": [
+                {
+                  "name": "Cardiology (Estimated)",
+                  "cost": "\u20b9200,000 \u2013 \u20b9450,000"
+                },
+                {
+                  "name": "Orthopedics (Estimated)",
+                  "cost": "\u20b9120,000 \u2013 \u20b9350,000"
+                },
+                {
+                  "name": "General Surgery (Estimated)",
+                  "cost": "\u20b9150,000 \u2013 \u20b9300,000"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Felix Hospital",
+            "rating": 4.8,
+            "reviews": 26134,
+            "address": "Felix Hospital, Paras Tierea, Sector 137, Noida, Uttar Pradesh 201304, India",
+            "phone": "078359 99444",
+            "website": "https://www.felixhospital.com/",
+            "lat": 28.5058462,
+            "lng": 77.40860119999999,
+            "place_id": "ChIJbT0nXfboDDkR_T0Vqwz3yvs",
+            "google_found": true,
+            "nearest_airport": "Indira Gandhi International Airport",
+            "navigation_url": "https://www.google.com/maps/dir/?api=1&destination=28.5058462,77.40860119999999",
+            "source_record": {
+              "name": "Felix Hospital, Sector-137",
+              "city": "Noida",
+              "international_phone": "",
+              "surgeryPackages": [
+                {
+                  "name": "Cardiology (Estimated)",
+                  "cost": "\u20b9200,000 \u2013 \u20b9450,000"
+                },
+                {
+                  "name": "Orthopedics (Estimated)",
+                  "cost": "\u20b9120,000 \u2013 \u20b9350,000"
+                },
+                {
+                  "name": "General Surgery (Estimated)",
+                  "cost": "\u20b9150,000 \u2013 \u20b9300,000"
+                }
+              ]
+            }
+          },
+          {
+            "name": "SGVP Holistic Hospital: Multispeciality Hospital in Ahmedabad",
+            "rating": 4.9,
+            "reviews": 13466,
+            "address": "SGVP Campus, Sarkhej - Gandhinagar Hwy, Ahmedabad, Gujarat 382481, India",
+            "phone": "02717 240 001",
+            "website": "https://www.sgvpholistichospital.org/",
+            "lat": 23.1325106,
+            "lng": 72.5398902,
+            "place_id": "ChIJEe0clb6CXjkRXtm9LrSFZWE",
+            "google_found": true,
+            "nearest_airport": "Sardar Vallabhbhai Patel International Airport",
+            "navigation_url": "https://www.google.com/maps/dir/?api=1&destination=23.1325106,72.5398902",
+            "source_record": {
+              "name": "SGVP Holistic Hospital",
+              "city": "Ahmedabad",
+              "international_phone": "",
+              "surgeryPackages": [
+                {
+                  "name": "Cardiology (Estimated)",
+                  "cost": "\u20b9200,000 \u2013 \u20b9450,000"
+                },
+                {
+                  "name": "Orthopedics (Estimated)",
+                  "cost": "\u20b9120,000 \u2013 \u20b9350,000"
+                },
+                {
+                  "name": "General Surgery (Estimated)",
+                  "cost": "\u20b9150,000 \u2013 \u20b9300,000"
+                }
+              ]
+            }
+          },
+          {
+            "name": "GMERS Civil Hospital",
+            "rating": 3.8,
+            "reviews": 547,
+            "address": "Shop 8, Micro Shopping Centre, Civil Hospital Campus, Sector 12, Sector 12B, Gandhinagar, Gujarat 382016, India",
+            "phone": "079 2324 0296",
+            "website": "http://gmersmchgandhinagar.com/",
+            "lat": 23.2185054,
+            "lng": 72.63974259999999,
+            "place_id": "ChIJg6W7vLcrXDkRKRDayIy5xnI",
+            "google_found": true,
+            "nearest_airport": "Sardar Vallabhbhai Patel International Airport",
+            "navigation_url": "https://www.google.com/maps/dir/?api=1&destination=23.2185054,72.63974259999999",
+            "source_record": {
+              "name": "General Hospital",
+              "city": "Gandhinagar",
+              "international_phone": "",
+              "surgeryPackages": [
+                {
+                  "name": "Cardiology (Estimated)",
+                  "cost": "\u20b9200,000 \u2013 \u20b9450,000"
+                },
+                {
+                  "name": "Orthopedics (Estimated)",
+                  "cost": "\u20b9120,000 \u2013 \u20b9350,000"
+                },
+                {
+                  "name": "General Surgery (Estimated)",
+                  "cost": "\u20b9150,000 \u2013 \u20b9300,000"
+                }
+              ]
+            }
+          },
+          {
+            "name": "India Healthcare Solutions Private Limited",
+            "rating": 3.3,
+            "reviews": 198,
+            "address": "No. 70, A-Block, Ritherdon Rd, opposite Apostolic Church, Vepery, Purasaiwakkam, Chennai, Tamil Nadu 600007, India",
+            "phone": "044 4555 8333",
+            "website": null,
+            "lat": 13.0807934,
+            "lng": 80.258501,
+            "place_id": "ChIJP93hv-FlUjoR5oOTsEfyi_o",
+            "google_found": true,
+            "nearest_airport": "Chennai International Airport",
+            "navigation_url": "https://www.google.com/maps/dir/?api=1&destination=13.0807934,80.258501",
+            "source_record": {
+              "name": "Healthcare Pvt. Ltd.",
+              "city": "Chennai",
+              "international_phone": "",
+              "surgeryPackages": [
+                {
+                  "name": "Cardiology (Estimated)",
+                  "cost": "\u20b9200,000 \u2013 \u20b9450,000"
+                },
+                {
+                  "name": "Orthopedics (Estimated)",
+                  "cost": "\u20b9120,000 \u2013 \u20b9350,000"
+                },
+                {
+                  "name": "General Surgery (Estimated)",
+                  "cost": "\u20b9150,000 \u2013 \u20b9300,000"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Max Super Speciality Hospital, Sector 128, Noida",
+            "rating": 4.4,
+            "reviews": 10077,
+            "address": "Jaypee Hospital Rd, Goberdhanpur, Sector 128, Noida, Uttar Pradesh 201304, India",
+            "phone": "088604 44888",
+            "website": "https://www.maxhealthcare.in/hospital-network/max-super-speciality-hospital-noida/?utm_source=D-Organic&utm_medium=gmb",
+            "lat": 28.5154379,
+            "lng": 77.37144719999999,
+            "place_id": "ChIJVVVVVWrmDDkRRMvnsvw60ew",
+            "google_found": true,
+            "nearest_airport": "Indira Gandhi International Airport",
+            "navigation_url": "https://www.google.com/maps/dir/?api=1&destination=28.5154379,77.37144719999999",
+            "source_record": {
+              "name": "Max Multisprecilaity Hospital, Greater",
+              "city": "Noida",
+              "international_phone": "",
+              "surgeryPackages": [
+                {
+                  "name": "Cardiology (Estimated)",
+                  "cost": "\u20b9200,000 \u2013 \u20b9450,000"
+                },
+                {
+                  "name": "Orthopedics (Estimated)",
+                  "cost": "\u20b9120,000 \u2013 \u20b9350,000"
+                },
+                {
+                  "name": "General Surgery (Estimated)",
+                  "cost": "\u20b9150,000 \u2013 \u20b9300,000"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Lilavati Hospital And Research Centre",
+            "rating": 4.2,
+            "reviews": 2926,
+            "address": "A-791, A-791, Bandra Reclamation Rd, General Arunkumar Vaidya Nagar, Bandra West, Mumbai, Maharashtra 400050, India",
+            "phone": "022 6930 1000",
+            "website": "https://www.lilavatihospital.com/",
+            "lat": 19.0510043,
+            "lng": 72.8293225,
+            "place_id": "ChIJsXCptzjJ5zsRlS-bPoti--k",
+            "google_found": true,
+            "nearest_airport": "Chhatrapati Shivaji Maharaj International Airport Mumbai",
+            "navigation_url": "https://www.google.com/maps/dir/?api=1&destination=19.0510043,72.8293225",
+            "source_record": {
+              "name": "hospital",
+              "city": "Mumbai",
+              "international_phone": "",
+              "surgeryPackages": [
+                {
+                  "name": "Cardiology (Estimated)",
+                  "cost": "\u20b9200,000 \u2013 \u20b9450,000"
+                },
+                {
+                  "name": "Orthopedics (Estimated)",
+                  "cost": "\u20b9120,000 \u2013 \u20b9350,000"
+                },
+                {
+                  "name": "General Surgery (Estimated)",
+                  "cost": "\u20b9150,000 \u2013 \u20b9300,000"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Fortis Hospital Bangalore | Cunningham Road - Best Hospital in Bangalore",
+            "rating": 4.6,
+            "reviews": 6476,
+            "address": "14, Cunningham Rd, near Sigma Central Mall, Vasanth Nagar, Bengaluru, Karnataka 560001, India",
+            "phone": "096868 60310",
+            "website": "https://www.fortishealthcare.com/india/fortis-hospital-in-cunningham-road-karnataka?utm_source=google-gmb&utm_medium=gmb-seo-url&utm_campaign=Regional-gmb",
+            "lat": 12.9882166,
+            "lng": 77.5943056,
+            "place_id": "ChIJDwuAR2gWrjsRyCp4aIz0cFY",
+            "google_found": true,
+            "nearest_airport": "Kempegowda International Airport Bengaluru",
+            "navigation_url": "https://www.google.com/maps/dir/?api=1&destination=12.9882166,77.5943056",
+            "source_record": {
+              "name": "Fortis Hospitals Ltd., Cunningham",
+              "city": "Bangalore",
+              "international_phone": "",
+              "surgeryPackages": [
+                {
+                  "name": "Cardiology (Estimated)",
+                  "cost": "\u20b9200,000 \u2013 \u20b9450,000"
+                },
+                {
+                  "name": "Orthopedics (Estimated)",
+                  "cost": "\u20b9120,000 \u2013 \u20b9350,000"
+                },
+                {
+                  "name": "General Surgery (Estimated)",
+                  "cost": "\u20b9150,000 \u2013 \u20b9300,000"
+                }
+              ]
+            }
+          }
+        ];
 
-    const citySelect = document.getElementById('city-select');
-    const specialtySelect = document.getElementById('specialty-select');
-    const searchBtn = document.getElementById('search-btn');
-    const resultsSection = document.getElementById('results-section');
-    const hospitalsGrid = document.getElementById('hospitals-grid');
-    const resultsCount = document.getElementById('results-count');
-    const noResults = document.getElementById('no-results');
-    const hospitalModal = document.getElementById('hospital-modal');
-    const closeModal = document.getElementById('close-modal');
+        // 2. PROCESS THE DATA
+        // We need to convert the flat array into an object grouped by city keys
+        // E.g. { delhi: [...], mumbai: [...] }
+        
+        const hospitalData = {};
+        const availableCities = new Set();
 
-    // Container for hospitals grouped by city
-    let hospitalData = {};
+        rawHospitals.forEach((item, index) => {
+            // Determine City Key
+            let cityKey = "other";
+            if (item.source_record && item.source_record.city) {
+                cityKey = item.source_record.city.toLowerCase().trim();
+            } else if (item.address.toLowerCase().includes("delhi")) {
+                cityKey = "delhi";
+            } else if (item.address.toLowerCase().includes("mumbai")) {
+                cityKey = "mumbai";
+            }
+            
+            // Normalize basic city names if needed
+            if (cityKey === "new delhi") cityKey = "delhi";
+            if (cityKey === "bengaluru") cityKey = "bangalore";
+            if (cityKey === "gurugram") cityKey = "gurgaon";
 
-    function normalizeKey(s){ return (s||'').toString().trim().toLowerCase(); }
+            availableCities.add(cityKey);
 
-    function safeText(v, fallback='No data available'){
-      if (v === null || typeof v === 'undefined' || v === '') return fallback;
-      return v;
-    }
+            if (!hospitalData[cityKey]) {
+                hospitalData[cityKey] = [];
+            }
 
-    // Map your enriched JSON record to the UI record structure
-    function mapRecordToUI(r, idx){
-      return {
-        id: r.place_id || r.certId || ('g-' + idx),
-        name: safeText(r.name, 'Unnamed Hospital'),
-        nabh: true,
-        rating: r.rating || null,
-        reviews: r.reviews || null,
-        specialties: r.specialties || (r.source_record && r.source_record.specialties) || [],
-        address: r.address || (r.source_record && r.source_record.city) || '',
-        phone: r.phone || r.international_phone || (r.source_record && r.source_record.phone) || '',
-        website: r.website || (r.source_record && (r.source_record.website1 || r.source_record.website2)) || null,
-        doctors: r.doctors || (r.source_record && r.source_record.doctors) || [],
-        surgeries: r.surgeryPackages || r.surgeries || (r.source_record && r.source_record.surgeryPackages) || [],
-        nearestAirport: r.nearest_airport || r.nearestAirport || (r.source_record && r.source_record.nearestAirport) || '',
-        navigation: r.navigation_url || r.navigation || (r.source_record && r.source_record.navigation) || ''
-      };
-    }
+            // Extract Specialties from Surgery Packages
+            let specialtiesList = ["Multi-Specialty"]; // Default
+            if (item.source_record && item.source_record.surgeryPackages) {
+                specialtiesList = item.source_record.surgeryPackages.map(s => s.name.replace(" (Estimated)", ""));
+            }
 
-    // Populate city dropdown preserving Canva labels, but only include cities present in JSON + Kolkata
-    function populateCitySelectFromData(){
-      const existing = new Set(Array.from(citySelect.options).map(o => normalizeKey(o.value || o.textContent)));
-      const cities = Object.keys(hospitalData).sort();
-      cities.forEach(cityKey => {
-        if (!existing.has(cityKey)){
-          const opt = document.createElement('option');
-          opt.value = cityKey;
-          opt.textContent = cityKey.split(' ').map(w=> w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
-          citySelect.appendChild(opt);
+            // Map JSON to Layout Format
+            hospitalData[cityKey].push({
+                id: index,
+                name: item.name,
+                nabh: true, // Assuming all in this list are NABH based on filename
+                rating: item.rating || "N/A",
+                reviews: item.reviews || 0,
+                specialties: specialtiesList,
+                address: item.address,
+                phone: item.phone || "Contact for details",
+                website: item.website || "#",
+                doctors: [], // JSON does not provide specific doctor details
+                surgeries: item.source_record.surgeryPackages || [],
+                nearestAirport: item.nearest_airport || "Unknown",
+                navigation: "View on Google Maps",
+                fullAddress: item.address // for map linking
+            });
+        });
+
+        // 3. POPULATE CITY DROPDOWN DYNAMICALLY
+        const citySelect = document.getElementById('city-select');
+        citySelect.innerHTML = '<option value="">Choose a city...</option>';
+        
+        // Sort cities alphabetically and add to dropdown
+        Array.from(availableCities).sort().forEach(city => {
+            if(city === 'other') return;
+            const option = document.createElement('option');
+            option.value = city;
+            option.textContent = city.charAt(0).toUpperCase() + city.slice(1);
+            citySelect.appendChild(option);
+        });
+
+
+        // DOM elements
+        const specialtySelect = document.getElementById('specialty-select');
+        const searchBtn = document.getElementById('search-btn');
+        const resultsSection = document.getElementById('results-section');
+        const hospitalsGrid = document.getElementById('hospitals-grid');
+        const resultsCount = document.getElementById('results-count');
+        const noResults = document.getElementById('no-results');
+        const hospitalModal = document.getElementById('hospital-modal');
+        const closeModal = document.getElementById('close-modal');
+
+        // Search functionality
+        searchBtn.addEventListener('click', performSearch);
+        citySelect.addEventListener('change', performSearch);
+        specialtySelect.addEventListener('change', performSearch);
+
+        function performSearch() {
+            const selectedCity = citySelect.value;
+            const selectedSpecialty = specialtySelect.value;
+
+            if (!selectedCity) {
+                showNoResults();
+                return;
+            }
+
+            const hospitals = hospitalData[selectedCity] || [];
+            let filteredHospitals = hospitals;
+
+            if (selectedSpecialty) {
+                filteredHospitals = hospitals.filter(hospital => 
+                    hospital.specialties.some(specialty => 
+                        specialty.toLowerCase().includes(selectedSpecialty.toLowerCase())
+                    )
+                );
+            }
+
+            if (filteredHospitals.length === 0) {
+                showNoResults();
+            } else {
+                displayResults(filteredHospitals);
+            }
         }
-      });
-      if (!Array.from(citySelect.options).some(o => normalizeKey(o.value) === 'kolkata')){
-        const opt = document.createElement('option'); opt.value='kolkata'; opt.textContent='Kolkata'; citySelect.appendChild(opt);
-        if(!hospitalData['kolkata']) hospitalData['kolkata']=[];
-      }
-    }
 
-    function renderHospitalCards(list){
-      hospitalsGrid.innerHTML = list.map(hospital => {
-        const specialtiesHtml = (hospital.specialties || []).map(s => `<span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">${s}</span>`).join(' ');
-        const ratingHtml = hospital.rating ? `<div class="flex items-center"><span class="star-rating text-lg">★</span><span class="ml-1 font-semibold">${hospital.rating}</span></div>` : '';
-        const reviews = hospital.reviews ? `<p class="text-sm text-gray-600">${hospital.reviews} reviews</p>` : '';
-        const phone = hospital.phone ? `<p class="text-blue-600 font-medium">${hospital.phone}</p>` : '';
-        const address = hospital.address ? `<p class="text-gray-600 mb-2">${hospital.address}</p>` : '';
-        const nearestAirport = hospital.nearestAirport ? `<p class="text-sm text-gray-600 mb-2"><strong>Nearest Airport:</strong> ${hospital.nearestAirport}</p>` : `<p class="text-sm text-gray-600 mb-2"><strong>Nearest Airport:</strong> No data available</p>`;
-        return `
-          <div class="hospital-card bg-white rounded-lg shadow-md p-6 cursor-pointer" data-id="${hospital.id}">
-            <div class="flex justify-between items-start mb-4">
-              <div>
-                <h3 class="text-xl font-bold text-gray-900 mb-2">${hospital.name}</h3>
-                <div class="flex items-center mb-2">
-                  <span class="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">NABH Accredited</span>
+        function displayResults(hospitals) {
+            noResults.classList.add('hidden');
+            resultsSection.classList.remove('hidden');
+            resultsCount.textContent = `${hospitals.length} hospital(s) found`;
+
+            hospitalsGrid.innerHTML = hospitals.map(hospital => `
+                <div class="hospital-card bg-white rounded-lg shadow-md p-6 cursor-pointer" onclick="showHospitalDetails(${hospital.id})">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-2 line-clamp-2">${hospital.name}</h3>
+                            <div class="flex items-center mb-2">
+                                <span class="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">NABH Accredited</span>
+                            </div>
+                        </div>
+                        <div class="text-right min-w-[80px]">
+                            <div class="flex items-center justify-end">
+                                <span class="star-rating text-lg">★</span>
+                                <span class="ml-1 font-semibold">${hospital.rating}</span>
+                            </div>
+                            <p class="text-sm text-gray-600">${hospital.reviews} reviews</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <p class="text-gray-600 mb-2 line-clamp-2">${hospital.address}</p>
+                        <p class="text-blue-600 font-medium">${hospital.phone}</p>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h4 class="font-semibold text-gray-900 mb-2">Specialties:</h4>
+                        <div class="flex flex-wrap gap-2">
+                            ${hospital.specialties.slice(0, 4).map(specialty => 
+                                `<span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">${specialty}</span>`
+                            ).join('')}
+                             ${hospital.specialties.length > 4 ? `<span class="text-gray-500 text-sm">+${hospital.specialties.length - 4} more</span>` : ''}
+                        </div>
+                    </div>
+                    
+                    <div class="border-t pt-4">
+                        <p class="text-sm text-gray-600 mb-2">
+                            <strong>Nearest Airport:</strong> ${hospital.nearestAirport}
+                        </p>
+                        <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">
+                            View Details & Navigation →
+                        </button>
+                    </div>
                 </div>
-              </div>
-              <div class="text-right">
-                ${ratingHtml}
-                ${reviews}
-              </div>
-            </div>
+            `).join('');
+        }
 
-            <div class="mb-4">
-              ${address}
-              ${phone}
-            </div>
+        function showNoResults() {
+            resultsSection.classList.add('hidden');
+            noResults.classList.remove('hidden');
+        }
 
-            <div class="mb-4">
-              <h4 class="font-semibold text-gray-900 mb-2">Specialties:</h4>
-              <div class="flex flex-wrap gap-2">${specialtiesHtml || '<span class="text-gray-600">No specialties data</span>'}</div>
-            </div>
+        function showHospitalDetails(hospitalId) {
+            const hospital = Object.values(hospitalData).flat().find(h => h.id === hospitalId);
+            if (!hospital) return;
 
-            <div class="border-t pt-4">
-              ${nearestAirport}
-              <button class="text-blue-600 hover:text-blue-800 font-medium text-sm view-details-btn">View Details & Navigation →</button>
-            </div>
-          </div>
-        `;
-      }).join('');
+            document.getElementById('modal-hospital-name').textContent = hospital.name;
+            document.getElementById('modal-content').innerHTML = `
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-lg font-semibold mb-3">Hospital Information</h3>
+                        <div class="space-y-2 mb-6">
+                            <p><strong>Address:</strong> ${hospital.address}</p>
+                            <p><strong>Phone:</strong> ${hospital.phone}</p>
+                            <p><strong>Website:</strong> <a href="${hospital.website}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800">${hospital.website}</a></p>
+                            <p><strong>Rating:</strong>  ${hospital.rating} (${hospital.reviews} reviews)</p>
+                            <p><strong>NABH Accredited:</strong> <span class="text-green-600"> Yes</span></p>
+                        </div>
 
-      // attach handlers after rendering
-      setTimeout(()=>{
-        hospitalsGrid.querySelectorAll('.hospital-card').forEach(card=>{
-          const btn = card.querySelector('.view-details-btn');
-          const id = card.getAttribute('data-id');
-          btn?.addEventListener('click', ()=> showHospitalDetails(id));
+                       
+                        
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold mb-3">Estimated Surgery Costs</h3>
+                        <div class="space-y-3 mb-6">
+                            ${hospital.surgeries.length > 0 ? hospital.surgeries.map(surgery => `
+                                <div class="bg-blue-50 p-3 rounded-lg">
+                                    <p class="font-medium">${surgery.name}</p>
+                                    <p class="text-blue-600 font-semibold">${surgery.cost}</p>
+                                </div>
+                            `).join('') : '<p class="text-gray-500">No surgery cost data available.</p>'}
+                        </div>
+
+                        <h3 class="text-lg font-semibold mb-3">Airport Navigation</h3>
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <p class="font-medium mb-2">From ${hospital.nearestAirport}</p>
+                            <p class="text-sm text-gray-700 mb-2">Click below to view directions.</p>
+                            <button class="mt-3 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm" onclick="openGoogleMaps('${hospital.fullAddress.replace(/'/g, "\\'")}')">
+                                Open in Google Maps
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            hospitalModal.classList.remove('hidden');
+        }
+
+        function openGoogleMaps(address) {
+            const encodedAddress = encodeURIComponent(address);
+            window.open(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`, '_blank', 'noopener,noreferrer');
+        }
+
+        // Modal close functionality
+        closeModal.addEventListener('click', () => {
+            hospitalModal.classList.add('hidden');
         });
-      },50);
-    }
-
-    function showNoResults(){ resultsSection.classList.add('hidden'); noResults.classList.remove('hidden'); }
-    function showResults(list){ noResults.classList.add('hidden'); resultsSection.classList.remove('hidden'); resultsCount.textContent = `${list.length} hospital(s) found`; renderHospitalCards(list); }
-
-    function performSearch(){
-      const selectedCity = normalizeKey(citySelect.value);
-      const selectedSpecialty = (specialtySelect.value||'').toLowerCase();
-      if (!selectedCity){ showNoResults(); return; }
-      const hospitals = (hospitalData[selectedCity] || []).slice();
-      if (!hospitals || hospitals.length===0){ showNoResults(); return; }
-      let filtered = hospitals;
-      if (selectedSpecialty){ filtered = hospitals.filter(h=> (h.specialties||[]).some(s=> s.toLowerCase().includes(selectedSpecialty)) ); }
-      if (!filtered.length) showNoResults(); else showResults(filtered);
-    }
-
-    function showHospitalDetails(id){
-      const hospital = Object.values(hospitalData).flat().find(h=>h.id===id);
-      if (!hospital) return;
-      document.getElementById('modal-hospital-name').textContent = hospital.name || 'Hospital Details';
-
-      const websiteHtml = hospital.website ? `<p><strong>Website:</strong> <a href="${hospital.website}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800">${hospital.website}</a></p>` : `<p><strong>Website:</strong> No data available</p>`;
-      const ratingHtml = hospital.rating ? `<p><strong>Rating:</strong> ★ ${hospital.rating} (${hospital.reviews||0} reviews)</p>` : `<p><strong>Rating:</strong> No data available</p>`;
-
-      const doctorsHtml = (hospital.doctors||[]).map(d=>`
-        <div class="bg-gray-50 p-4 rounded-lg border-l-4 border-blue-500 mb-3">
-          <div class="flex justify-between items-start mb-2">
-            <div>
-              <p class="font-semibold text-lg">${d.name||'Dr. —'}</p>
-              <p class="text-blue-600 font-medium">${d.specialty||''}</p>
-            </div>
-            <div class="text-right">
-              ${d.rating?`<div class="flex items-center"><span class="star-rating text-lg">★</span><span class="ml-1 font-semibold">${d.rating}</span></div>`:''}
-              ${d.reviews?`<p class="text-sm text-gray-600">${d.reviews} reviews</p>`:''}
-            </div>
-          </div>
-          <p class="text-sm text-gray-700 mb-2">${d.qualifications||''}</p>
-          <div class="flex justify-between items-center text-sm">
-            <span class="text-gray-600">${d.experience||''} experience</span>
-            ${d.consultationFee?`<span class="text-green-600 font-medium">Consultation: ${d.consultationFee}</span>`:''}
-          </div>
-          ${d.languages?`<p class="text-xs text-gray-500 mt-1">Languages: ${d.languages.join(', ')}</p>`:''}
-        </div>
-      `).join('') || '<p class="text-gray-600">Doctor details not provided.</p>';
-
-      modalContent.innerHTML = `
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div>
-            <h3 class="text-lg font-semibold mb-3">Hospital Information</h3>
-            <div class="space-y-2 mb-6">
-              <p><strong>Address:</strong> ${hospital.address||'No data available'}</p>
-              <p><strong>Phone:</strong> ${hospital.phone||'No data available'}</p>
-              ${websiteHtml}
-              ${ratingHtml}
-              <p><strong>NABH Accredited:</strong> <span class="text-green-600">✓ Yes</span></p>
-            </div>
-
-            <h3 class="text-lg font-semibold mb-3">All Specialist Doctors</h3>
-            <div class="space-y-4 mb-6">${doctorsHtml}</div>
-          </div>
-
-          <div>
-            <h3 class="text-lg font-semibold mb-3">Popular Surgery Costs</h3>
-            <div class="space-y-3 mb-6">
-              ${(hospital.surgeries||[]).map(s=>`<div class="bg-blue-50 p-3 rounded-lg"><p class="font-medium">${s.name||s.title||'Procedure'}</p><p class="text-blue-600 font-semibold">${s.cost||s.price||'No data available'}</p></div>`).join('') || '<p class="text-gray-600">Surgery price details not provided.</p>'}
-            </div>
-
-            <h3 class="text-lg font-semibold mb-3">Airport Navigation</h3>
-            <div class="bg-green-50 p-4 rounded-lg">
-              <p class="font-medium mb-2">From ${hospital.nearestAirport||'No data available'}</p>
-              <p class="text-sm text-gray-700">${hospital.navigation||'Navigation details not provided.'}</p>
-              ${hospital.address?`<button class="mt-3 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm" onclick="window.open('https://www.google.com/maps/search/${encodeURIComponent(hospital.address)}','_blank')">Open in Google Maps</button>`:''}
-            </div>
-          </div>
-        </div>
-      `;
-
-      hospitalModal.classList.remove('hidden');
-    }
-
-    // Modal controls
-    closeModal?.addEventListener('click', ()=> hospitalModal.classList.add('hidden'));
-    hospitalModal?.addEventListener('click', (e)=> { if (e.target===hospitalModal) hospitalModal.classList.add('hidden'); });
-
-    // wire search UI
-    searchBtn?.addEventListener('click', ()=> performSearch());
-    citySelect?.addEventListener('change', ()=> performSearch());
-    specialtySelect?.addEventListener('change', ()=> performSearch());
-
-    // Fetch JSON from repo root and build hospitalData
-    (async function loadJson(){
-      try{
-        const resp = await fetch('/nabh_google_enriched.json');
-        if (!resp.ok) throw new Error('Could not fetch JSON from /nabh_google_enriched.json (status ' + resp.status + ')');
-        const data = await resp.json();
-        // data expected as array of records
-        data.forEach((r, idx)=>{
-          // determine city
-          const city = normalizeKey((r.source_record && (r.source_record.city || r.source_record.city_name)) || r.city || r.state || r.region || 'unknown');
-          if (!hospitalData[city]) hospitalData[city]=[];
-          hospitalData[city].push(mapRecordToUI(r, idx));
+        hospitalModal.addEventListener('click', (e) => {
+            if (e.target === hospitalModal) {
+                hospitalModal.classList.add('hidden');
+            }
         });
-
-        // ensure kolkata exists
-        if (!hospitalData['kolkata']) hospitalData['kolkata']=[];
-
-        populateCitySelectFromData();
-        console.info('Loaded NABH enriched JSON. Cities:', Object.keys(hospitalData));
-
-        // Optionally show instructions in console
-        if (Object.keys(hospitalData).length===0) showNoResults();
-      }catch(err){
-        console.warn('Error loading enriched JSON:', err);
-        // keep UI usable
-        showNoResults();
-      }
-    })();
-
-    // small helpers used inside showHospitalDetails
-    const modalContent = document.getElementById('modal-content');
-
-  </script>
-
-  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99f7740f013d3b33',t:'MTc2MzMwMDk4NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
-
-</body>
+    </script>
+ </body>
 </html>
