@@ -30,16 +30,36 @@
        <h1 id="site-title" class="text-3xl font-bold text-blue-900">Curefly Global</h1>
        <p id="tagline" class="text-lg text-blue-700 mt-1">Find World-Class Healthcare</p>
       </div>
-      <div class="flex flex-col sm:flex-row gap-4">
-       <div class="text-center">
-        <p class="text-sm text-gray-600">Local Helpdesk</p>
-        <p id="local-helpdesk" class="text-lg font-semibold text-blue-900">+91-11-4567-8900</p>
-       </div>
-       <div class="text-center">
-        <p class="text-sm text-gray-600">International Helpdesk</p>
-        <p id="international-helpdesk" class="text-lg font-semibold text-green-700">+1-800-123-4567</p>
-       </div>
-      </div>
+      <div class="text-center">
+    <button onclick="openContactForm()" 
+            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-3 rounded-lg transition">
+        Contact Us
+    </button>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+    emailjs.init("-DEMPRuO-YC_H2Uj4");
+
+    function openContactForm() {
+        const name = prompt("Enter your name:");
+        const email = prompt("Enter your email:");
+        const message = prompt("Enter your message:");
+
+        if (!name || !email || !message) {
+            alert("Please fill all fields.");
+            return;
+        }
+
+        emailjs.send("service_67ydigv", "template_c9ziuip", {
+            from_name: name,
+            reply_to: email,
+            message: message
+        })
+        .then(() => alert("Your message has been sent!"))
+        .catch((err) => alert("Failed: " + JSON.stringify(err)));
+    }
+</script>
+
      </div>
     </div>
    </header><main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
